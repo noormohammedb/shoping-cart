@@ -33,7 +33,7 @@ router.get('/', function (req, res, next) {
       price: 899
     }
   ];
-  res.render('index', { title: 'shopping cart', products });
+  res.render('index', { title: 'shopping cart', products, admin: true });
 });
 
 module.exports = router;
