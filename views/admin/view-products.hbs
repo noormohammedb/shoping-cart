@@ -1,29 +1,35 @@
 <section>
    <div class="container mt-3 d-flex flex-column">
-      <button type="button" class="btn btn-outline-success mb-3 ml-auto">Add Products</button>
-      <table class="table table-hover table-dark table-responsive-sm">
-         <thead>
-            <tr>
-               <th scope="col">#</th>
-               <th scope="col">Product Name</th>
-               <th scope="col">Category</th>
-               <th scope="col">Description</th>
-               <th scope="col">Price</th>
-               <th scope="col">Picture</th>
-            </tr>
-         </thead>
-         <tbody>
-            {{#each products}}
-            <tr>
-               <th scope="row">{{@index}}</th>
-               <td> {{this.name}} </td>
-               <td> {{this.category}} </td>
-               <td> {{this.description}} </td>
-               <td> {{this.price}} </td>
-               <td> <img src="{{this.image}}" alt="" style="height: 50px; width: auto;"> </td>
-            </tr>
-            {{/each}}
-         </tbody>
-      </table>
+      <div class="row mb-3 ml-auto">
+         <a href="/admin/add-products" class="">
+            <button type="button" class="btn btn-outline-success">Add Products</button>
+         </a>
+      </div>
+      <div class="row">
+         <table class="table table-hover table-dark table-responsive-sm">
+            <thead>
+               <tr>
+                  <th scope="col">#</th>
+                  <th scope="col">Product Name</th>
+                  <th scope="col">Category</th>
+                  <th scope="col">Description</th>
+                  <th scope="col">Price</th>
+                  <th scope="col">Picture</th>
+               </tr>
+            </thead>
+            <tbody>
+               {{#each products}}
+               <tr>
+                  <th scope="row">{{@index}}</th>
+                  <td> {{this.name}} </td>
+                  <td> {{this.category}} </td>
+                  <td> {{this.description}} </td>
+                  <td> {{this.price}} </td>
+                  <td> <img src="{{this.image}}" alt="" style="height: 50px; width: auto;"> </td>
+               </tr>
+               {{/each}}
+            </tbody>
+         </table>
+      </div>
    </div>
 </section>
