@@ -3,10 +3,11 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
-var hbs = require('express-handlebars')
+var hbs = require('express-handlebars');
 
 var indexRouter = require('./routes/index');
 var adminRouter = require('./routes/admin');
+const fileUpload = require('express-fileupload');
 
 var app = express();
 
@@ -18,8 +19,9 @@ app.engine('hbs', hbs({
   defaultLayout: 'layout',
   layoutsDir: __dirname + '/views/layout/',
   partialsDir: __dirname + '/views/partials/'
-}))
+}));
 
+app.use(fileUpload())
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));

@@ -33,7 +33,12 @@ router.get('/', function (req, res, next) {
       price: 899
     }
   ];
-  res.render('index', { title: 'shopping cart', products, admin: false });
+  let hbsObject = {
+    products,
+    title: 'shopping cart',
+    admin: false
+  }
+  res.render('index', hbsObject);
 });
 
 module.exports = router;

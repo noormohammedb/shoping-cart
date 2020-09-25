@@ -33,7 +33,26 @@ router.get('/', function (req, res, next) {
       price: 899
     }
   ];
-  res.render('admin/view-products', {title: "admin ", products,  admin: true })
+  let hbsObject = {
+    products,
+    title: "admin ",
+    admin: true,
+  }
+  res.render('admin/view-products', hbsObject)
+});
+
+router.get('/add-product', (req, res, next) => {
+  let hbsObject = {
+    title: "admin add-porducts",
+    admin: true
+  }
+  res.render('admin/add-product', hbsObject)
+});
+
+router.post('/add-product', (req, res, next) => {
+  console.log(req.files);
+  console.log(req.body);
+  res.render('admin/add-product', { title: "admin add-porducts", admin: true })
 });
 
 module.exports = router;
