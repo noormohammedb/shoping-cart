@@ -1,7 +1,7 @@
 var express = require('express');
 var router = express.Router();
 
-/* GET home page. */
+/* GET users listing. */
 router.get('/', function (req, res, next) {
   let products = [
     {
@@ -33,7 +33,7 @@ router.get('/', function (req, res, next) {
       price: 899
     }
   ];
-  res.render('index', { title: 'shopping cart', products, admin: false });
+  res.render('admin/view-products', {title: "admin ", products,  admin: true })
 });
 
 module.exports = router;
