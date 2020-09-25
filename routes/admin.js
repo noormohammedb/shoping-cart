@@ -50,8 +50,17 @@ router.get('/add-product', (req, res, next) => {
 });
 
 router.post('/add-product', (req, res, next) => {
-  console.log(req.files);
   console.log(req.body);
+  save = req.files.image;
+  console.log(`file name : ${save.name} Size : ${save.size} md5 : ${save.md5}`);
+  locdir = `./uploaded/${save.name}`
+  save.mv(locdir,(error)=>{
+    if(error){
+      res.send('fileupload error')
+      throw error
+    } 
+    console.log('done');
+  })
   res.render('admin/add-product', { title: "admin add-porducts", admin: true })
 });
 
