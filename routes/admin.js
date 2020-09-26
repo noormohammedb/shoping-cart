@@ -1,5 +1,6 @@
 var express = require("express");
 var router = express.Router();
+var dbOperation = require("../dbconfig/dbOperation")
 
 /* GET users listing. */
 router.get("/", function (req, res, next) {
@@ -54,7 +55,7 @@ router.get("/add-product", (req, res, next) => {
 
 router.post("/add-product", (req, res, next) => {
   console.log(req.body);
-  // console.log(req.files);
+
   if (req.files) {
     save = req.files.image;
     console.log(`file name : ${save.name} Size : ${save.size} md5 : ${save.md5}`);
@@ -65,10 +66,18 @@ router.post("/add-product", (req, res, next) => {
         throw error;
       }
       console.log("done");
+      req.body.image = save.name;
     });
   } else {
     console.log("no file in this request");
   }
+
+  dbOperation.addProduct(req.body, (dbRes) => {
+    console.log(dbRes.ops);
+  });
+
+  // console.log(req.files);
+
   res.render("admin/add-product", { title: "admin add-porducts", admin: true });
 });
 

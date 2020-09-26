@@ -5,6 +5,8 @@ var cookieParser = require("cookie-parser");
 var logger = require("morgan");
 var hbs = require("express-handlebars");
 
+var db = require("./dbconfig/dbConnect")
+
 var indexRouter = require("./routes/index");
 var adminRouter = require("./routes/admin");
 const fileUpload = require("express-fileupload");
@@ -28,6 +30,11 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
+
+db.dbConnection((error) => {
+  if (error) console.log(error);
+  else console.log("DataBase Connection Sucess");
+});
 
 app.use("/", indexRouter);
 app.use("/admin", adminRouter);
