@@ -8,5 +8,10 @@ let addProduct = (data, callback) => {
    });
 }
 
+let getProduct = async (callback) => {
+   let data = await db.getDB().database.collection(ProductCollection).find().toArray();
+   // console.log(data);
+   callback(data)
+}
 
-module.exports = { addProduct };
+module.exports = { addProduct, getProduct };

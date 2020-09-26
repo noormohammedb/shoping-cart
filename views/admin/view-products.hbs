@@ -21,11 +21,11 @@
                {{#each products}}
                <tr>
                   <th scope="row">{{@index}}</th>
-                  <td> {{this.name}} </td>
+                  <td> {{this.product_name}} </td>
                   <td> {{this.category}} </td>
                   <td> {{this.description}} </td>
                   <td> {{this.price}} </td>
-                  <td> <img src="{{this.image}}" alt="" style="height: 50px; width: auto;"> </td>
+                  <td> <img src="/uploaded/{{this.image}}" alt="" style="height: 50px; width: auto;"> </td>
                </tr>
                {{/each}}
             </tbody>
