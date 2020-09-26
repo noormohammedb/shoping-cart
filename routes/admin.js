@@ -9,11 +9,11 @@ router.get("/", function (req, res, next) {
     title: "admin ",
     admin: true,
   };
-  dbOperation.getProduct((data) => {
+  dbOperation.getProduct().then((data) => {
     console.log(data);
     hbsObject.products = data
     res.render("admin/view-products", hbsObject);
-  });
+  })
 });
 
 router.get("/add-product", (req, res, next) => {
@@ -46,7 +46,7 @@ router.post("/add-product", (req, res, next) => {
   }
 
   let pushToDb = () => {
-    dbOperation.addProduct(req.body, (dbRes) => {
+    dbOperation.addProduct(req.body).then((dbRes) => {
       console.log(dbRes.ops);
     });
   }
