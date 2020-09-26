@@ -2,3 +2,7 @@ body {
   /* font: 14px "Lucida Grande", Helvetica, Arial, sans-serif; */
   background: #202020d3;
 }
+#products-image-user{
+  height: 250px;
+  width: 100%;
+}
