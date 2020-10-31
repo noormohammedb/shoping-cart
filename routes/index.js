@@ -11,7 +11,7 @@ router.get("/", function (req, res, next) {
       loggedinUser: req.session.userData
    };
    dbOperation.getProduct().then((data) => {
-      console.log(data);
+      // console.log(data);
       hbsObject.products = data
       res.render("index", hbsObject);
    })
