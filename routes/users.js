@@ -1,38 +1,45 @@
 var express = require("express");
 var router = express.Router();
 var dbOpeUsers = require("../dbconfig/dbOperationAccount")
+const bcrypt = require('bcrypt');
 
 
 router.get('/login', (req, res, next) => {
   res.render("users/login-form", {});
 })
-router.post('/login', (req, res) => {
+router.post('/login', async (req, res) => {
   console.log(req.body);
-  dbOpeUsers.login(req.body).then((dbRes) => {
-    console.log(dbRes);
-    console.log(dbRes.length);
-    if (dbRes.length) {
-
-      if (dbRes[0].password === req.body.password) {
+  console.log(req.body.password);
+  let dbRes = await dbOpeUsers.login(req.body);
+  // console.log(dbRes);
+  console.log(dbRes.length);
+  if (dbRes.length) {
+    bcrypt.compare(req.body.password, dbRes[0].password).then((compareResult) => {
+      if (compareResult) {
         console.log('password matched');
         res.send('logedin')
       } else {
+        console.log(compareResult);
         console.log('password missmatch');
         res.send('password missmatch')
       }
-    } else {
-      console.log('no user found');
-      res.send('no user found')
-    }
-  })
+    })
+  } else {
+    console.log('no user found');
+    res.send('no user found')
+  }
 })
 
 router.get('/signup', (req, res) => {
   res.render("users/signup-form", {})
 })
 
-router.post('/signup', (req, res) => {
+router.post('/signup', async (req, res) => {
   console.log(req.body);
-  dbOpeUsers.signup(req.body).then(console.log)
+  req.body.password = await bcrypt.hash(req.body.password, 10)
+  dbOpeUsers.signup(req.body).then((dbRes) => {
+    console.log(dbRes.ops);
+    res.redirect('/account/login')
+  })
 })
 module.exports = router;
