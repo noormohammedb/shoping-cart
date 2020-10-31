@@ -16,4 +16,8 @@ router.get("/", function (req, res, next) {
   })
 });
 
+router.get('/login', (req, res, next) => {
+  res.render("users/login-form", {});
+})
+
 module.exports = router;
