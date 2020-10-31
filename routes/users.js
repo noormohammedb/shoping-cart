@@ -1,7 +1,6 @@
 var express = require("express");
-const { route } = require(".");
 var router = express.Router();
-var dbOperation = require("../dbconfig/dbOperation")
+var dbOpeUsers = require("../dbconfig/dbOperationAccount")
 
 
 router.get('/login', (req, res, next) => {
@@ -9,6 +8,23 @@ router.get('/login', (req, res, next) => {
 })
 router.post('/login', (req, res) => {
   console.log(req.body);
+  dbOpeUsers.login(req.body).then((dbRes) => {
+    console.log(dbRes);
+    console.log(dbRes.length);
+    if (dbRes.length) {
+
+      if (dbRes[0].password === req.body.password) {
+        console.log('password matched');
+        res.send('logedin')
+      } else {
+        console.log('password missmatch');
+        res.send('password missmatch')
+      }
+    } else {
+      console.log('no user found');
+      res.send('no user found')
+    }
+  })
 })
 
 router.get('/signup', (req, res) => {
@@ -17,5 +33,6 @@ router.get('/signup', (req, res) => {
 
 router.post('/signup', (req, res) => {
   console.log(req.body);
+  dbOpeUsers.signup(req.body).then(console.log)
 })
 module.exports = router;

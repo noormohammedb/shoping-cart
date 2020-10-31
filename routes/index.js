@@ -1,6 +1,6 @@
 var express = require("express");
 var router = express.Router();
-var dbOperation = require("../dbconfig/dbOperation")
+var dbOperation = require("../dbconfig/dbOperationProducts")
 
 
 /* GET home page. */
