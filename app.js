@@ -6,6 +6,7 @@ var logger = require("morgan");
 var hbs = require("express-handlebars");
 
 var db = require("./dbconfig/dbConnect")
+var session = require("express-session");
 
 var indexRouter = require("./routes/index");
 var userRouter = require("./routes/users");
@@ -31,6 +32,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
+app.use(session({ secret: 'loremispum', cookie: { maxAge: 60000 } }))
 
 db.dbConnection((error) => {
   if (error) console.log(error);

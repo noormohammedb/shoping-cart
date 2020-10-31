@@ -21,11 +21,20 @@
          <div class="dropdown">
             <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton"
                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-               Account
+               {{#if loggedinUser}}
+               {{ loggedinUser.name }}
+            </button>
+            <div class="dropdown-menu bg-dark" aria-labelledby="dropdownMenuButton">
+               <a class="dropdown-item text-light" href="/account/Account">Account</a>
+               <a class="dropdown-item text-light" href="/account/logout">Logout</a>
+            </div>
+            {{else}}
+            Account
             </button>
             <div class="dropdown-menu bg-dark" aria-labelledby="dropdownMenuButton">
                <a class="dropdown-item text-light" href="/account/login">Login</a>
             </div>
+            {{/if}}
          </div>
       </div>
    </nav>
