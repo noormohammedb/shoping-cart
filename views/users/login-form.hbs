@@ -7,6 +7,9 @@
          <div class="heading">
             <h4 class="display-3 text-center">Login</h4>
          </div>
+         <div class="text-center text-warning display-4">
+            <b> {{warning}} </b>
+         </div>
          <form action="/account/login" method="POST">
             <div class="form-group">
                <label for="exampleInputEmail1">Email address</label>
@@ -18,7 +21,7 @@
                <input type="password" class="form-control" id="exampleInputPassword1" name="password">
             </div>
             <div class="form-group">
-               <div class="a">
+               <div class="row">
                   <a href="/account/signup" class="p-2"> Create A Account </a>
                </div>
                <div class="text-right mr-5">

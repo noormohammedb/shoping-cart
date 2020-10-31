@@ -17,16 +17,16 @@ router.post('/login', async (req, res) => {
     bcrypt.compare(req.body.password, dbRes[0].password).then((compareResult) => {
       if (compareResult) {
         console.log('password matched');
-        res.send('logedin')
+        res.redirect('/');
       } else {
         console.log(compareResult);
         console.log('password missmatch');
-        res.send('password missmatch')
+        res.render("users/login-form", { warning: 'Wrong Password' });
       }
     })
   } else {
     console.log('no user found');
-    res.send('no user found')
+    res.render("users/login-form", { warning: 'No User Found' });
   }
 })
 
