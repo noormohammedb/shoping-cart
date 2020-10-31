@@ -44,4 +44,11 @@ router.post('/signup', async (req, res) => {
     res.redirect('/account/login')
   })
 })
+
+router.get('/logout', (req, res) => {
+  delete req.session.isLogedin;
+  delete req.session.userData;
+  res.redirect('/')
+
+})
 module.exports = router;
