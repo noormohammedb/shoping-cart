@@ -20,4 +20,7 @@ router.get('/login', (req, res, next) => {
   res.render("users/login-form", {});
 })
 
+router.get('/signup', (req, res) => {
+  res.render("users/signup-form", {})
+})
 module.exports = router;
