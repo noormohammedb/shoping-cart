@@ -8,6 +8,7 @@ var hbs = require("express-handlebars");
 var db = require("./dbconfig/dbConnect")
 
 var indexRouter = require("./routes/index");
+var userRouter = require("./routes/users");
 var adminRouter = require("./routes/admin");
 const fileUpload = require("express-fileupload");
 
@@ -37,6 +38,7 @@ db.dbConnection((error) => {
 });
 
 app.use("/", indexRouter);
+app.use("/account", userRouter);
 app.use("/admin", adminRouter);
 
 // catch 404 and forward to error handler
