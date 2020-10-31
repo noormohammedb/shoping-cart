@@ -17,6 +17,8 @@ router.post('/login', async (req, res) => {
     bcrypt.compare(req.body.password, dbRes[0].password).then((compareResult) => {
       if (compareResult) {
         console.log('password matched');
+        req.session.isLogedin = true;
+        req.session.userData = dbRes[0];
         res.redirect('/');
       } else {
         console.log(compareResult);

@@ -8,6 +8,7 @@ router.get("/", function (req, res, next) {
    let hbsObject = {
       title: "shopping cart",
       admin: false,
+      loggedinUser: req.session.userData
    };
    dbOperation.getProduct().then((data) => {
       console.log(data);
