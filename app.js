@@ -10,6 +10,7 @@ var session = require("express-session");
 
 var indexRouter = require("./routes/index");
 var userRouter = require("./routes/users");
+var cartRouter = require("./routes/cart");
 var adminRouter = require("./routes/admin");
 const fileUpload = require("express-fileupload");
 
@@ -41,6 +42,7 @@ db.dbConnection((error) => {
 
 app.use("/", indexRouter);
 app.use("/account", userRouter);
+app.use("/cart", cartRouter);
 app.use("/admin", adminRouter);
 
 // catch 404 and forward to error handler
