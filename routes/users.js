@@ -5,7 +5,12 @@ const bcrypt = require('bcrypt');
 
 
 router.get('/login', (req, res, next) => {
-  res.render("users/login-form", {});
+  if (req.session.userData) {
+    console.log('login redirect to home');
+    res.redirect('/')
+  } else {
+    res.render("users/login-form", {});
+  }
 })
 router.post('/login', async (req, res) => {
   console.log(req.body);
@@ -33,7 +38,12 @@ router.post('/login', async (req, res) => {
 })
 
 router.get('/signup', (req, res) => {
-  res.render("users/signup-form", {})
+  if (req.session.userData) {
+    console.log('signup redirect to home');
+    res.redirect('/')
+  } else {
+    res.render("users/signup-form", {})
+  }
 })
 
 router.post('/signup', async (req, res) => {
