@@ -10,7 +10,7 @@ router.get("/", function (req, res, next) {
     admin: true,
   };
   dbOperation.getProduct().then((data) => {
-    console.log(data);
+    // console.log(data);
     hbsObject.products = data
     res.render("admin/view-products", hbsObject);
   })
@@ -55,5 +55,20 @@ router.post("/add-product", (req, res, next) => {
 
   res.render("admin/add-product", { title: "admin add-porducts", admin: true });
 });
+
+router.get('/edit-product/:id', (req, res) => {
+  console.log(req.params);
+  res.redirect("/admin");
+})
+
+router.get('/delete-product/:id', (req, res) => {
+  console.log(req.params);
+  dbOperation.deleteProduct(req.params.id)
+    .then((data) => {
+      res.send(data)
+    })
+    .catch(console.error)
+  // res.redirect("/admin");
+})
 
 module.exports = router;

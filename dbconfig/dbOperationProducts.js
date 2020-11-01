@@ -1,4 +1,5 @@
 var db = require("./dbConnect")
+const { ObjectId } = require('mongodb')
 
 ProductCollection = 'product'
 
@@ -16,4 +17,11 @@ let getProduct = () => {
    });
 }
 
-module.exports = { addProduct, getProduct };
+let deleteProduct = (ProductID) => {
+   return new Promise((resolve, reject) => {
+      db.getDB().database.collection(ProductCollection).update({ _id: ObjectId(ProductID) }, { $set: { deleted: true } })
+         .then(resolve)
+   })
+}
+
+module.exports = { addProduct, getProduct, deleteProduct };
