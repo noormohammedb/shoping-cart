@@ -65,7 +65,7 @@ router.get('/delete-product/:id', (req, res) => {
   console.log(req.params);
   dbOperation.deleteProduct(req.params.id)
     .then((data) => {
-      res.send(data)
+      res.redirect('/admin')
     })
     .catch(console.error)
   // res.redirect("/admin");

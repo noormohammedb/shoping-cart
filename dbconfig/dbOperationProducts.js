@@ -12,7 +12,7 @@ let addProduct = (data) => {
 
 let getProduct = () => {
    return new Promise(async (resolve, reject) => {
-      let data = await db.getDB().database.collection(ProductCollection).find().toArray();
+      let data = await db.getDB().database.collection(ProductCollection).find({ deleted: { $ne: true } }).toArray();
       resolve(data)
    });
 }
