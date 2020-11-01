@@ -28,8 +28,8 @@
                   <td> <img src="/uploaded/{{this.image}}" alt="" style="height: 50px; width: auto;"> </td>
                   <td>
                      <a href="/admin/edit-product/{{this._id}}" class="btn btn-primary mr-3"> edit </a>
-                     <a href="/admin/delete-product/{{this._id}}" class="btn btn-danger ml-3"> delete
-                     </a>
+                     <a href="/admin/delete-product/{{this._id}}" class="btn btn-danger ml-3"
+                        onclick="return confirm('Are You sure Want To Delete {{ this.product_name }}')">Delete </a>
                   </td>
                </tr>
                {{/each}}

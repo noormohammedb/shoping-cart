@@ -21,7 +21,15 @@ let deleteProduct = (ProductID) => {
    return new Promise((resolve, reject) => {
       db.getDB().database.collection(ProductCollection).update({ _id: ObjectId(ProductID) }, { $set: { deleted: true } })
          .then(resolve)
-   })
+   });
 }
 
-module.exports = { addProduct, getProduct, deleteProduct };
+let getProductForEdit = (ProductID) => {
+   return new Promise((resolve, reject) => {
+      db.getDB().database.collection(ProductCollection).findOne({ _id: ObjectId(ProductID) })
+         .then(resolve)
+         .catch(reject)
+   });
+}
+
+module.exports = { addProduct, getProduct, deleteProduct, getProductForEdit };

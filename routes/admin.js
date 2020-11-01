@@ -52,13 +52,31 @@ router.post("/add-product", (req, res, next) => {
   }
 
   // console.log(req.files);
-
-  res.render("admin/add-product", { title: "admin add-porducts", admin: true });
+  let hbsObject = {
+    title: "admin add-porducts",
+    admin: true
+  };
+  res.render("admin/add-product", hbsObject);
 });
 
 router.get('/edit-product/:id', (req, res) => {
-  console.log(req.params);
-  res.redirect("/admin");
+  // console.log(req.params);
+  dbOperation.getProductForEdit(req.params.id)
+    .then((dbRes) => {
+      // console.log(dbRes);
+      let hbsObject = {
+        title: "admin edit product",
+        admin: true,
+        ...dbRes
+      };
+      console.log(hbsObject);
+      res.render("admin/edit-product", hbsObject)
+    })
+    .catch((error) => {
+      console.error(error);
+      res.send(error)
+      throw error
+    })
 })
 
 router.get('/delete-product/:id', (req, res) => {
