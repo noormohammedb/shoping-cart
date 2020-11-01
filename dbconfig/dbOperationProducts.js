@@ -32,4 +32,12 @@ let getProductForEdit = (ProductID) => {
    });
 }
 
-module.exports = { addProduct, getProduct, deleteProduct, getProductForEdit };
+let updateProduct = (ProductID, UpdationData) => {
+   return new Promise((resolve, reject) => {
+      db.getDB().database.collection(ProductCollection).updateOne({ _id: ObjectId(ProductID) }, { $set: UpdationData })
+         .then(resolve)
+         .catch(reject)
+   })
+}
+
+module.exports = { addProduct, getProduct, deleteProduct, getProductForEdit, updateProduct };

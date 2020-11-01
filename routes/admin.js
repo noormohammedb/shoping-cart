@@ -69,7 +69,7 @@ router.get('/edit-product/:id', (req, res) => {
         admin: true,
         ...dbRes
       };
-      console.log(hbsObject);
+      // console.log(hbsObject);
       res.render("admin/edit-product", hbsObject)
     })
     .catch((error) => {
@@ -77,7 +77,16 @@ router.get('/edit-product/:id', (req, res) => {
       res.send(error)
       throw error
     })
-})
+});
+
+router.post('/edit-product/:id', (req, res) => {
+  console.log(req.params.id);
+  console.log(req.body);
+  dbOperation.updateProduct(req.params.id, req.body).then(console.log)
+  res.redirect(`/admin/edit-product/${req.params.id}`)
+  // res.send('/edit-product  POST')
+
+});
 
 router.get('/delete-product/:id', (req, res) => {
   console.log(req.params);
@@ -87,6 +96,6 @@ router.get('/delete-product/:id', (req, res) => {
     })
     .catch(console.error)
   // res.redirect("/admin");
-})
+});
 
 module.exports = router;
