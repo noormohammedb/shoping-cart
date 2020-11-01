@@ -82,8 +82,28 @@ router.get('/edit-product/:id', (req, res) => {
 router.post('/edit-product/:id', (req, res) => {
   console.log(req.params.id);
   console.log(req.body);
-  dbOperation.updateProduct(req.params.id, req.body).then(console.log)
-  res.redirect(`/admin/edit-product/${req.params.id}`)
+  if (req.files) {
+    save = req.files.image;
+    console.log(`file name : ${save.name} Size : ${save.size} md5 : ${save.md5}`);
+    locdir = `${__dirname}/../public/uploaded/${save.name}`;
+    save.mv(locdir, (error) => {
+      if (error) {
+        res.send("fileupload error");
+        throw error;
+      }
+      console.log("done");
+      req.body.image = save.name;
+      dbOperation.updateProduct(req.params.id, req.body).then((dbRes) => {
+        console.log("Product Updated With image");
+        res.redirect(`/admin/edit-product/${req.params.id}`)
+      })
+    });
+  } else {
+    dbOperation.updateProduct(req.params.id, req.body).then((dbRes) => {
+      console.log("Product details Updated");
+      res.redirect(`/admin/edit-product/${req.params.id}`)
+    })
+  }
   // res.send('/edit-product  POST')
 
 });
