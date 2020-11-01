@@ -3,33 +3,37 @@
       <div class="row">
          <div class="col">
             <div class="display-4 text-warning text-center">
-               <b>Add Product </b>
+               <b>Edit product </b>
             </div>
          </div>
       </div>
       <div class="row mt-4">
          <div class="col"></div>
          <div class="col col-12 col-sm-10 col-md-8">
-            <form method="POST" action="/admin/add-product" enctype="multipart/form-data"
+            <form method="POST" action="/admin/edit-product/{{_id}}" enctype="multipart/form-data"
                class="jumbotron bg-dark text-light">
                <div class="form-group">
                   <label for="product">Product Name</label>
-                  <input type="text" class="form-control" id="product" aria-describedby="product" name="product_name">
+                  <input type="text" class="form-control" id="product" aria-describedby="product" name="product_name"
+                     value="{{ product_name }}">
                </div>
                <div class="form-group">
                   <label for="category">category</label>
-                  <input type="text" class="form-control" id="category" name="category">
+                  <input type="text" class="form-control" id="category" name="category" value="{{ category }}">
                </div>
                <div class="form-group">
                   <label for="description">Description</label>
-                  <input type="text" class="form-control" id="description" name="description">
+                  <input type="text" class="form-control" id="description" name="description" value="{{ description }}">
                </div>
                <div class="form-group">
                   <label for="price">Price</label>
-                  <input type="text" class="form-control" id="price" name="price">
+                  <input type="text" class="form-control" id="price" name="price" value="{{ price }}">
                </div>
                <div class="form-group">
                   <label for="picture">Picture</label>
+                  <div class="container m-2">
+                     <img src="/uploaded/{{ image }}" alt="Product image" style="height: 200px; width: auto;">
+                  </div>
                   <input type="file" class="form-control" id="picture" name="image">
                </div>
                <button type="submit" class="btn btn-primary">Submit</button>
