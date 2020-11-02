@@ -1,7 +1,6 @@
-const { json } = require("express");
 const express = require("express");
 const router = express.Router();
-
+var dbOpeUsers = require("../dbconfig/dbOperationAccount")
 /* Cart Router */
 router.get('/', ToLoginIfNotVerified, (req, res) => {
    console.log("/cart");
@@ -14,7 +13,10 @@ router.get('/add-to-cart/:id', ToLoginIfNotVerified, (req, res) => {
       productId: req.params.id,
       userId: req.session.userData._id
    }
-   res.send(resObj)
+   dbOpeUsers.addToCart(resObj).then((dbRes) => {
+      res.send({ ...dbRes });
+   });
+   // res.redirect('/');
 });
 
 /* MiddleWare for login verification */
