@@ -17,15 +17,35 @@ router.get('/', ToLoginIfNotVerified, (req, res) => {
 });
 
 /* add products to user cart */
-router.get('/add-to-cart/:id', ToLoginIfNotVerified, (req, res) => {
-   let resObj = {
-      productId: req.params.id,
-      userId: req.session.userData._id
+router.get('/add-to-cart/:id', (req, res) => {
+   if (!req.session.isLogedin) {
+      res.send({
+         success: false,
+         loginStatus: false,
+         status: "User Not LoggedIn"
+      });
+   } else {
+
+      let resObj = {
+         productId: req.params.id,
+         userId: req.session.userData._id
+      }
+      dbOpeUsers.addToCart(resObj)
+         .then((dbRes) => {
+            res.send({
+               success: true,
+               loginStatus: true,
+               status: "Add To Cart Done",
+            });
+         })
+         .catch((e) => {
+            res.send({
+               success: false,
+               loginStatus: false,
+               status: "Data Base Error"
+            });
+         });
    }
-   dbOpeUsers.addToCart(resObj).then((dbRes) => {
-      // res.send({ ...dbRes });
-   });
-   res.redirect('/');
 });
 
 /* MiddleWare for login verification */
