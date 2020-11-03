@@ -13,11 +13,11 @@ router.get('/login', (req, res, next) => {
   }
 })
 router.post('/login', async (req, res) => {
-  console.log(req.body);
-  console.log(req.body.password);
+  // console.log(req.body);
+  // console.log(req.body.password);
   let dbRes = await dbOpeUsers.login(req.body);
   // console.log(dbRes);
-  console.log(dbRes.length);
+  // console.log(dbRes.length);
   if (dbRes.length) {
     bcrypt.compare(req.body.password, dbRes[0].password).then((compareResult) => {
       if (compareResult) {
@@ -47,7 +47,7 @@ router.get('/signup', (req, res) => {
 })
 
 router.post('/signup', async (req, res) => {
-  console.log(req.body);
+  // console.log(req.body);
   req.body.password = await bcrypt.hash(req.body.password, 10)
   dbOpeUsers.signup(req.body).then((dbRes) => {
     req.session.isLogedin = true;
