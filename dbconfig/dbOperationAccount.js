@@ -85,8 +85,7 @@ async function getProductsFromCart(userId) {
       ];
       let dbRes = await db.getDB().database.collection('cart').aggregate(QueryForDb).toArray();
 
-      return dbRes;
-      // return dbRes[0].productsInCart;
+      return dbRes[0].productsInCart;
    }
    catch (e) {
       console.error(e);

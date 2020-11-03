@@ -1,9 +1,41 @@
-<div class="container">
-   <div class="row">
-      <div class="col">
-         <h3 class="display-3 text-warning">
-            Cart
-         </h3>
+<div class="container-fluid">
+   <div class="row mt-5">
+      <div class="col"> </div>
+      <div class="col col-12 col-sm-10 col-md-8">
+         <table class="table table-hover table-dark table-responsive-sm text-center">
+            <thead>
+               <tr>
+                  <th scope="col">Product Picture</th>
+                  <th scope="col">description</th>
+                  <th scope="col" style="width: 50px;">Quantity</th>
+                  <th scope="col">Price</th>
+                  <th scope="col">Actions</th>
+               </tr>
+            </thead>
+            <tbody>
+               {{#each items}}
+               <tr>
+                  <td scope="row">
+                     <img src="/uploaded/{{this.image}}" alt="nomage" width="120" height="70">
+                  </td>
+                  <td scope="row"> {{ this.product_name }} </td>
+                  <td scope="row" class="d-flex">
+                     <button class="btn btn-primary">&#8722;</button>
+                     <input type="number" min="1" size="1" style=" appearance: textfield; margin: 0 5px;" value="1"
+                        class="text-center">
+                     <button class="btn btn-primary">&#65291;</button>
+                  </td>
+                  <td scope="row"> {{ this.price }} </td>
+                  <td scope="row">
+                     {{!-- <a href="/admin/edit-product/" class="btn btn-primary "> edit </a> --}}
+                     <a href="/admin/delete-product/" class="btn btn-danger "
+                        onclick="return confirm('Are You sure Want To Delete ')"> Remove </a>
+                  </td>
+               </tr>
+               {{/each}}
+            </tbody>
+         </table>
       </div>
+      <div class="col"> </div>
    </div>
 </div>

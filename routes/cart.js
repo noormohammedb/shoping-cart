@@ -6,15 +6,14 @@ var dbOpeUsers = require("../dbconfig/dbOperationAccount")
 router.get('/', ToLoginIfNotVerified, (req, res) => {
    dbOpeUsers.getProductsFromCart(req.session.userData._id)
       .then((productsArray) => {
-         console.log(productsArray);
-         res.send({ ...productsArray })
+         let hbsObject = {
+            title: "Cart | shopping cart",
+            admin: false,
+            loggedinUser: req.session.userData,
+            items: productsArray
+         };
+         res.render("users/user-cart", hbsObject);
       })
-   let hbsObject = {
-      title: "Cart | shopping cart",
-      admin: false,
-      loggedinUser: req.session.userData
-   };
-   // res.render("users/user-cart", hbsObject);
 });
 
 /* add products to user cart */
@@ -24,9 +23,9 @@ router.get('/add-to-cart/:id', ToLoginIfNotVerified, (req, res) => {
       userId: req.session.userData._id
    }
    dbOpeUsers.addToCart(resObj).then((dbRes) => {
-      res.send({ ...dbRes });
+      // res.send({ ...dbRes });
    });
-   // res.redirect('/');
+   res.redirect('/');
 });
 
 /* MiddleWare for login verification */
