@@ -42,7 +42,7 @@ async function addToCart(dataObj) {
             match: { userId: ObjectId(dataObj.userId) },
             UpdateData: { $push: { products: ObjectId(dataObj.productId) } }
          }
-         let dbRes = await db.getDB().database.collection('cart').updateOne(QueryForDb.match, dataForDb.UpdateData)
+         let dbRes = await db.getDB().database.collection('cart').updateOne(QueryForDb.match, QueryForDb.UpdateData)
          // console.log(dbRes);
          return dbRes;
       }
@@ -54,5 +54,46 @@ async function addToCart(dataObj) {
    }
 }
 
+async function getProductsFromCart(userId) {
+   console.log(userId);
+   try {
+      let QueryForDb = [
+         {
+            $match: {
+               userId: ObjectId(userId)
+            }
+         },
+         {
+            $lookup: {
+               from: 'product',
+               let: {
+                  listOfProducts: '$products'
+               },
+               pipeline: [
+                  {
+                     $match: {
+                        $expr: {
+                           $in: ['$_id', "$$listOfProducts"]
+                        }
+                     }
+                  }
+               ],
+               as: "productsInCart"
+            }
+         }
 
-module.exports = { signup, login, addToCart }
+      ];
+      let dbRes = await db.getDB().database.collection('cart').aggregate(QueryForDb).toArray();
+
+      return dbRes;
+      // return dbRes[0].productsInCart;
+   }
+   catch (e) {
+      console.error(e);
+      console.log('db error , get products form cart (Aggregation)');
+      throw e
+   }
+   return null;
+}
+
+module.exports = { signup, login, addToCart, getProductsFromCart }

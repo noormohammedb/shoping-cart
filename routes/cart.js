@@ -1,10 +1,20 @@
 const express = require("express");
 const router = express.Router();
 var dbOpeUsers = require("../dbconfig/dbOperationAccount")
+
 /* Cart Router */
 router.get('/', ToLoginIfNotVerified, (req, res) => {
-   console.log("/cart");
-   res.render("users/user-cart", {});
+   dbOpeUsers.getProductsFromCart(req.session.userData._id)
+      .then((productsArray) => {
+         console.log(productsArray);
+         res.send({ ...productsArray })
+      })
+   let hbsObject = {
+      title: "Cart | shopping cart",
+      admin: false,
+      loggedinUser: req.session.userData
+   };
+   // res.render("users/user-cart", hbsObject);
 });
 
 /* add products to user cart */
