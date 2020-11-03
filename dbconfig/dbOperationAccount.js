@@ -95,4 +95,12 @@ async function getProductsFromCart(userId) {
    return null;
 }
 
-module.exports = { signup, login, addToCart, getProductsFromCart }
+async function getCartProductsCount(userId) {
+   let dbRes = await db.getDB().database.collection('cart').findOne({ userId: ObjectId(userId) })
+   if (!dbRes)
+      return null;
+   else
+      return dbRes.products.length;
+}
+
+module.exports = { signup, login, addToCart, getProductsFromCart, getCartProductsCount }
