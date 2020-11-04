@@ -9,6 +9,8 @@ $(document).ready(() => {
          if (!resData.responseJSON.loginStatus) {
             window.location = `${window.location.protocol}//${window.location.host}/account/login/`;
          } else if (resData.responseJSON.success) {
+            if (!$("sup").html())
+               $("sup").html(0)
             $("sup").html(parseInt($("sup").html()) + 1)
             console.log("json sucess");
          } else {
