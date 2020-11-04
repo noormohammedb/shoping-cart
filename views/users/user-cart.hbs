@@ -16,16 +16,16 @@
                {{#each items}}
                <tr>
                   <td scope="row">
-                     <img src="/uploaded/{{this.image}}" alt="nomage" width="120" height="70">
+                     <img src="/uploaded/{{this.product.image}}" alt="nomage" width="120" height="70">
                   </td>
-                  <td scope="row"> {{ this.product_name }} </td>
+                  <td scope="row"> {{ this.product.product_name }} </td>
                   <td scope="row" class="d-flex">
                      <button class="btn btn-primary">&#8722;</button>
-                     <input type="number" min="1" size="1" style=" appearance: textfield; margin: 0 5px;" value="1"
-                        class="text-center">
+                     <input type="number" min="1" size="1" style=" appearance: textfield; margin: 0 5px;"
+                        value="{{this.quantity}}" class="text-center">
                      <button class="btn btn-primary">&#65291;</button>
                   </td>
-                  <td scope="row"> {{ this.price }} </td>
+                  <td scope="row"> {{ this.product.price }} </td>
                   <td scope="row">
                      {{!-- <a href="/admin/edit-product/" class="btn btn-primary "> edit </a> --}}
                      <a href="/admin/delete-product/" class="btn btn-danger "

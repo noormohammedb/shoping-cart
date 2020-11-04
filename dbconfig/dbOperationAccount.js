@@ -76,7 +76,6 @@ async function addToCart(dataObj) {
 }
 
 async function getProductsFromCart(userId) {
-   console.log(userId);
    try {
       let QueryForDb = [
          {
@@ -85,30 +84,25 @@ async function getProductsFromCart(userId) {
             }
          },
          {
+            $unwind: '$products'
+         },
+         {
+            $project: {
+               item: '$products.itemId',
+               quantity: '$products.quantity'
+            }
+         },
+         {
             $lookup: {
                from: 'product',
-               let: {
-                  listOfProducts: '$products'
-               },
-               pipeline: [
-                  {
-                     $match: {
-                        $expr: {
-                           $in: ['$_id', "$$listOfProducts"]
-                        }
-                     }
-                  }
-               ],
-               as: "productsInCart"
+               localField: 'item',
+               foreignField: '_id',
+               as: 'product'
             }
          }
-
       ];
       let dbRes = await db.getDB().database.collection('cart').aggregate(QueryForDb).toArray();
-      if (!dbRes.length)
-         return null;
-      else
-         return dbRes[0].productsInCart;
+      return dbRes;
    }
    catch (e) {
       console.error(e);
