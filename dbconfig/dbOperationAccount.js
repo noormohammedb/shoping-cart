@@ -26,23 +26,44 @@ async function login(userData) {
 }
 
 async function addToCart(dataObj) {
+   let productObject = {
+      itemId: ObjectId(dataObj.productId),
+      quantity: 1
+   }
+   var dbRes;
    try {
-      let isUserHaveProductCart = await db.getDB().database.collection('cart').findOne({ userId: ObjectId(dataObj.userId) })
+      let isUserHaveProductCart = await db.getDB().database.collection('cart')
+         .findOne({ userId: ObjectId(dataObj.userId) })
       // console.log(isUserHaveProductCart);
       if (!isUserHaveProductCart) {
          let dataForDb = {
             userId: ObjectId(dataObj.userId),
-            products: [ObjectId(dataObj.productId)]
+            products: [productObject]
          }
-         let dbRes = await db.getDB().database.collection('cart').insertOne(dataForDb);
+         dbRes = await db.getDB().database.collection('cart').insertOne(dataForDb);
          // console.log(dbRes);
          return dbRes;
       } else {
-         let QueryForDb = {
-            match: { userId: ObjectId(dataObj.userId) },
-            UpdateData: { $push: { products: ObjectId(dataObj.productId) } }
+         let ProductExist = isUserHaveProductCart.products
+            .findIndex(product => product.itemId == dataObj.productId)
+         console.log(ProductExist);
+         if (ProductExist != -1) {
+            await db.getDB().database.collection('cart').updateOne(
+               {
+                  userId: ObjectId(dataObj.userId),
+                  'products.itemId': productObject.itemId
+               },
+               {
+                  $inc: { 'products.$.quantity': 1 }
+               })
+            return null;
+         } else {
+            let QueryForDb = {
+               match: { userId: ObjectId(dataObj.userId) },
+               UpdateData: { $push: { products: productObject } }
+            }
+            dbRes = await db.getDB().database.collection('cart').updateOne(QueryForDb.match, QueryForDb.UpdateData)
          }
-         let dbRes = await db.getDB().database.collection('cart').updateOne(QueryForDb.match, QueryForDb.UpdateData)
          // console.log(dbRes);
          return dbRes;
       }
@@ -104,5 +125,8 @@ async function getCartProductsCount(userId) {
    else
       return dbRes.products.length;
 }
+
+
+
 
 module.exports = { signup, login, addToCart, getProductsFromCart, getCartProductsCount }
