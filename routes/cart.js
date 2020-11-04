@@ -41,7 +41,7 @@ router.get('/add-to-cart/:id', (req, res) => {
          .catch((e) => {
             res.send({
                success: false,
-               loginStatus: false,
+               loginStatus: true,
                status: "Data Base Error"
             });
          });
