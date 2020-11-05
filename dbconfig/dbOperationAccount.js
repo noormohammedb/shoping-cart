@@ -46,7 +46,7 @@ async function addToCart(dataObj) {
       } else {
          let ProductExist = isUserHaveProductCart.products
             .findIndex(product => product.itemId == dataObj.productId)
-         console.log(ProductExist);
+         // console.log(ProductExist);
          if (ProductExist != -1) {
             await db.getDB().database.collection('cart').updateOne(
                {
@@ -89,6 +89,7 @@ async function getProductsFromCart(userId) {
          {
             $project: {
                item: '$products.itemId',
+               userId: '$userId',
                quantity: '$products.quantity'
             }
          },
@@ -98,6 +99,16 @@ async function getProductsFromCart(userId) {
                localField: 'item',
                foreignField: '_id',
                as: 'product'
+            }
+         },
+         {
+            $project: {
+               item: 1,
+               quantity: 1,
+               userId: 1,
+               product: {
+                  $arrayElemAt: ['$product', 0]
+               }
             }
          }
       ];
@@ -113,11 +124,18 @@ async function getProductsFromCart(userId) {
 }
 
 async function getCartProductsCount(userId) {
-   let dbRes = await db.getDB().database.collection('cart').findOne({ userId: ObjectId(userId) })
-   if (!dbRes)
-      return null;
-   else
-      return dbRes.products.length;
+   try {
+      let dbRes = await db.getDB().database.collection('cart').findOne({ userId: ObjectId(userId) })
+      if (!dbRes)
+         return null;
+      else
+         return dbRes.products.length;
+   }
+   catch (e) {
+      console.error(e);
+      console.log('db error , get cart products Count');
+      throw e
+   }
 }
 
 

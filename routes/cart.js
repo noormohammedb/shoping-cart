@@ -3,25 +3,29 @@ const router = express.Router();
 var dbOpeUsers = require("../dbconfig/dbOperationAccount")
 
 /* Cart Router */
-router.get('/', ToLoginIfNotVerified, (req, res) => {
+// router.get('/', ToLoginIfNotVerified, (req, res) => {
+router.get('/', (req, res) => {
+   req.session.userData = {
+      "_id": "5f9e451e7bf1b71194d071ae",
+      "name": "test01",
+      "email": "01@email",
+      "password": "$2b$10$47IA1eg.LQmjHV96E5EH/eixcgUYR2ORyQJLibgdp8Bksh4gwHBxe"
+   }
    let hbsObject = {
       title: "Cart | shopping cart",
       admin: false,
       loggedinUser: req.session.userData
    };
-
    dbOpeUsers.getProductsFromCart(req.session.userData._id)
       .then((productsArray) => {
          if (productsArray) {
-            for (i = 0; i < productsArray.length; i++)
-               productsArray[i].product = productsArray[i].product[0]
             hbsObject.items = productsArray;
             dbOpeUsers.getCartProductsCount(req.session.userData._id)
                .then((count) => {
                   hbsObject.cartTagCount = count;
                   res.render("users/user-cart", hbsObject);
                })
-         } else res.render("user/user-cart", hbsObject);
+         } else res.render("users/user-cart", hbsObject);
       })
 });
 
