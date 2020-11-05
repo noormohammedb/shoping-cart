@@ -34,19 +34,16 @@ async function addToCart(dataObj) {
    try {
       let isUserHaveProductCart = await db.getDB().database.collection('cart')
          .findOne({ userId: ObjectId(dataObj.userId) })
-      // console.log(isUserHaveProductCart);
       if (!isUserHaveProductCart) {
          let dataForDb = {
             userId: ObjectId(dataObj.userId),
             products: [productObject]
          }
          dbRes = await db.getDB().database.collection('cart').insertOne(dataForDb);
-         // console.log(dbRes);
          return dbRes;
       } else {
          let ProductExist = isUserHaveProductCart.products
             .findIndex(product => product.itemId == dataObj.productId)
-         // console.log(ProductExist);
          if (ProductExist != -1) {
             await db.getDB().database.collection('cart').updateOne(
                {
@@ -64,7 +61,6 @@ async function addToCart(dataObj) {
             }
             dbRes = await db.getDB().database.collection('cart').updateOne(QueryForDb.match, QueryForDb.UpdateData)
          }
-         // console.log(dbRes);
          return dbRes;
       }
    }
@@ -138,7 +134,30 @@ async function getCartProductsCount(userId) {
    }
 }
 
+async function editCartProductQuantity(dataObj) {
+   try {
+      let QueryForDb = {
+         match: {
+            userId: ObjectId(dataObj.userId),
+            'products.itemId': ObjectId(dataObj.productId)
+         },
+         update: {
+            $inc: { 'products.$.quantity': parseInt(dataObj.oper) }
+         },
+         projection: {
+            returnOriginal: false
+         }
+      }
+      let dbRes = await db.getDB().database.collection('cart')
+         .findOneAndUpdate(QueryForDb.match, QueryForDb.update, QueryForDb.projection);
+      return dbRes;
+   }
+   catch (e) {
+      console.error(e);
+      console.log('db error , edit cart product Quantity');
+      throw e
+   }
 
+}
 
-
-module.exports = { signup, login, addToCart, getProductsFromCart, getCartProductsCount }
+module.exports = { signup, login, addToCart, getProductsFromCart, getCartProductsCount, editCartProductQuantity }

@@ -1,5 +1,7 @@
 $(document).ready(() => {
    console.log('script loaded');
+
+   /* Add to cart button in index page */
    $(".addToCartButton").click((e) => {
       console.log(e);
       let id = e.target.value;
@@ -19,3 +21,17 @@ $(document).ready(() => {
       })
    })
 })
+
+/* change product quantity in /cart */
+function changeProduct(userId, productId, oper) {
+   // console.log(user, product, oper);
+   $.ajax({
+      method: 'POST',
+      url: '/cart/edit-product-quantity',
+      data: { userId, productId, oper }
+   }).always((response) => {
+      if (response.success)
+         $(`#${productId}`).val(response.updatedQuantity)
+      console.log(response.updatedQuantity);
+   })
+}

@@ -20,10 +20,12 @@
                   </td>
                   <td scope="row"> {{ this.product.product_name }} </td>
                   <td scope="row" class="d-flex">
-                     <button class="btn btn-primary">&#8722;</button>
+                     <button class="btn btn-primary"
+                        onclick="changeProduct('{{this.userId}}','{{this.product._id}}',-1)">&#8722;</button>
                      <input type="number" min="1" size="1" style=" appearance: textfield; margin: 0 5px;"
-                        value="{{this.quantity}}" class="text-center">
-                     <button class="btn btn-primary">&#65291;</button>
+                        value="{{this.quantity}}" readonly id="{{this.product._id}}" class="text-center">
+                     <button class="btn btn-primary"
+                        onclick="changeProduct('{{this.userId}}','{{this.product._id}}',1)">&#65291;</button>
                   </td>
                   <td scope="row"> {{ this.product.price }} </td>
                   <td scope="row">
@@ -39,3 +41,7 @@
       <div class="col"> </div>
    </div>
 </div>
+
+<script>
+
+</script>

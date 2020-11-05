@@ -3,14 +3,14 @@ const router = express.Router();
 var dbOpeUsers = require("../dbconfig/dbOperationAccount")
 
 /* Cart Router */
-// router.get('/', ToLoginIfNotVerified, (req, res) => {
-router.get('/', (req, res) => {
-   req.session.userData = {
-      "_id": "5f9e451e7bf1b71194d071ae",
-      "name": "test01",
-      "email": "01@email",
-      "password": "$2b$10$47IA1eg.LQmjHV96E5EH/eixcgUYR2ORyQJLibgdp8Bksh4gwHBxe"
-   }
+router.get('/', ToLoginIfNotVerified, (req, res) => {
+   // router.get('/', (req, res) => {
+   // req.session.userData = {
+   //    "_id": "5f9e451e7bf1b71194d071ae",
+   //    "name": "test01",
+   //    "email": "01@email",
+   //    "password": "$2b$10$47IA1eg.LQmjHV96E5EH/eixcgUYR2ORyQJLibgdp8Bksh4gwHBxe"
+   // }
    let hbsObject = {
       title: "Cart | shopping cart",
       admin: false,
@@ -29,45 +29,70 @@ router.get('/', (req, res) => {
       })
 });
 
-/* add products to user cart */
-router.get('/add-to-cart/:id', (req, res) => {
-   if (!req.session.isLogedin) {
-      res.send({
-         success: false,
-         loginStatus: false,
-         status: "User Not LoggedIn"
-      });
-   } else {
 
-      let resObj = {
-         productId: req.params.id,
-         userId: req.session.userData._id
-      }
-      dbOpeUsers.addToCart(resObj)
-         .then((dbRes) => {
-            res.send({
-               success: true,
-               loginStatus: true,
-               status: "Add To Cart Done",
-            });
-         })
-         .catch((e) => {
-            res.send({
-               success: false,
-               loginStatus: true,
-               status: "Data Base Error"
-            });
-         });
+/* APIs for AJAX */
+
+/* add products to user cart */
+router.get('/add-to-cart/:id', AuthForAPI, (req, res) => {
+   let resObj = {
+      productId: req.params.id,
+      userId: req.session.userData._id
    }
+   dbOpeUsers.addToCart(resObj)
+      .then((dbRes) => {
+         res.send({
+            success: true,
+            loginStatus: true,
+            status: "Add To Cart Done",
+         });
+      })
+      .catch((e) => {
+         res.send({
+            success: false,
+            loginStatus: true,
+            status: "Data Base Error"
+         });
+      });
 });
+
+/* edit product quantity in cart */
+router.post('/edit-product-quantity', AuthForAPI, (req, res) => {
+   dbOpeUsers.editCartProductQuantity(req.body)
+      .then(dbRes => {
+         let updatedQuantity =
+            dbRes.value.products.find(iteration => req.body.productId == iteration.itemId)
+         res.send({
+            updatedQuantity: updatedQuantity.quantity,
+            success: true,
+            loginStatus: true,
+            status: "Data Base updated"
+         });
+      })
+      .catch(e => res.status(403).send("update error"));
+});
+
 
 /* MiddleWare for login verification */
 function ToLoginIfNotVerified(req, res, next) {
    if (req.session.isLogedin) {
       next()
    } else {
+      console.log("Redirected to login");
       res.redirect('/account/login')
    }
 }
+
+/* MiddleWare for API to login verification */
+function AuthForAPI(req, res, next) {
+   if (!req.session.isLogedin) {
+      res.send({
+         success: false,
+         loginStatus: false,
+         status: "User Not LoggedIn"
+      });
+   } else
+      next();
+}
+
 
 module.exports = router;
