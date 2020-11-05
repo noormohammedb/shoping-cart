@@ -22,16 +22,23 @@ $(document).ready(() => {
    })
 })
 
+var ele;
+
 /* change product quantity in /cart */
 function changeProduct(userId, productId, oper) {
-   // console.log(user, product, oper);
-   $.ajax({
-      method: 'POST',
-      url: '/cart/edit-product-quantity',
-      data: { userId, productId, oper }
-   }).always((response) => {
-      if (response.success)
-         $(`#${productId}`).val(response.updatedQuantity)
-      console.log(response.updatedQuantity);
-   })
+   if (!($(`#${productId}`).val() <= 1 && oper < 0)) {
+      $.ajax({
+         method: 'POST',
+         url: '/cart/edit-product-quantity',
+         data: { userId, productId, oper }
+      }).always((response) => {
+         if (response.success)
+            $(`#${productId}`).val(response.updatedQuantity);
+         if (ele?.hasAttribute('disabled'))
+            ele.removeAttribute('disabled');
+      })
+   } else {
+      ele = $(`#${productId}`)[0].previousElementSibling;
+      ele.setAttribute('disabled', null)
+   }
 }
