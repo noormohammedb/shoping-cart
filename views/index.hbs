@@ -9,7 +9,8 @@
                <p class="card-text"> {{this.description}} </p>
                <p class="card-text"> {{this.category}} </p>
                <p class="card-text"> {{this.price}} </p>
-               <a href="/cart/add-to-cart/{{this._id}}" class="btn btn-primary">add to cart</a>
+               <button class="btn btn-primary addToCartButton" value="{{this._id}}">add to cart</button>
+               {{!-- <a href="/cart/add-to-cart/{{this._id}}" class="btn btn-primary">add to cart</a> --}}
             </div>
          </div>
       </div>

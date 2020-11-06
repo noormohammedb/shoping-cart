@@ -16,19 +16,20 @@
                {{#each items}}
                <tr>
                   <td scope="row">
-                     <img src="/uploaded/{{this.image}}" alt="nomage" width="120" height="70">
+                     <img src="/uploaded/{{this.product.image}}" alt="nomage" width="120" height="70">
                   </td>
-                  <td scope="row"> {{ this.product_name }} </td>
+                  <td scope="row"> {{ this.product.product_name }} </td>
                   <td scope="row" class="d-flex">
-                     <button class="btn btn-primary">&#8722;</button>
-                     <input type="number" min="1" size="1" style=" appearance: textfield; margin: 0 5px;" value="1"
-                        class="text-center">
-                     <button class="btn btn-primary">&#65291;</button>
+                     <button class="btn btn-primary"
+                        onclick="changeProduct('{{this.userId}}','{{this.product._id}}',-1)">&#8722;</button>
+                     <input type="number" min="1" size="1" style=" appearance: textfield; margin: 0 5px;"
+                        value="{{this.quantity}}" readonly id="{{this.product._id}}" class="text-center">
+                     <button class="btn btn-primary"
+                        onclick="changeProduct('{{this.userId}}','{{this.product._id}}',1)">&#65291;</button>
                   </td>
-                  <td scope="row"> {{ this.price }} </td>
+                  <td scope="row"> {{ this.product.price }} </td>
                   <td scope="row">
-                     {{!-- <a href="/admin/edit-product/" class="btn btn-primary "> edit </a> --}}
-                     <a href="/admin/delete-product/" class="btn btn-danger "
+                     <a href="/cart/delete-product/{{this.product._id}}" class="btn btn-danger"
                         onclick="return confirm('Are You sure Want To Delete ')"> Remove </a>
                   </td>
                </tr>
@@ -38,4 +39,19 @@
       </div>
       <div class="col"> </div>
    </div>
+   <hr>
+   <div class="row">
+      <div class="col"></div>
+      <div class="col col-12 col-sm-10 col-md-8 text-right text-light">
+         <div class="mr-5">
+            <p class="font-weight-bold" style="font-size: 2rem;">Total : Rs.</p>
+            <button class="btn btn-success">Place Order</button>
+         </div>
+      </div>
+      <div class="col"></div>
+   </div>
 </div>
+
+<script>
+
+</script>
