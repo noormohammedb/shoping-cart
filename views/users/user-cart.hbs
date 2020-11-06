@@ -29,8 +29,7 @@
                   </td>
                   <td scope="row"> {{ this.product.price }} </td>
                   <td scope="row">
-                     {{!-- <a href="/admin/edit-product/" class="btn btn-primary "> edit </a> --}}
-                     <a href="/admin/delete-product/" class="btn btn-danger "
+                     <a href="/cart/delete-product/{{this.product._id}}" class="btn btn-danger"
                         onclick="return confirm('Are You sure Want To Delete ')"> Remove </a>
                   </td>
                </tr>
@@ -39,6 +38,17 @@
          </table>
       </div>
       <div class="col"> </div>
+   </div>
+   <hr>
+   <div class="row">
+      <div class="col"></div>
+      <div class="col col-12 col-sm-10 col-md-8 text-right text-light">
+         <div class="mr-5">
+            <p class="font-weight-bold" style="font-size: 2rem;">Total : Rs.</p>
+            <button class="btn btn-success">Place Order</button>
+         </div>
+      </div>
+      <div class="col"></div>
    </div>
 </div>
 

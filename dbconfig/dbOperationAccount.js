@@ -157,7 +157,37 @@ async function editCartProductQuantity(dataObj) {
       console.log('db error , edit cart product Quantity');
       throw e
    }
-
 }
 
-module.exports = { signup, login, addToCart, getProductsFromCart, getCartProductsCount, editCartProductQuantity }
+async function deleteProductFromCart(productId, userId) {
+   try {
+      let QueryForDb = {
+         match: {
+            userId: ObjectId(userId)
+         },
+         update: {
+            $pull: {
+               products: {
+                  itemId: ObjectId(productId)
+               }
+            }
+         }
+      }
+      dbRes = await db.getDB().database.collection('cart').updateOne(QueryForDb.match, QueryForDb.update);
+      return dbRes;
+   }
+   catch (e) {
+      console.error(e);
+      console.log('db error, delete product from cart');
+      throw e;
+   }
+}
+module.exports = {
+   signup,
+   login,
+   addToCart,
+   getProductsFromCart,
+   getCartProductsCount,
+   editCartProductQuantity,
+   deleteProductFromCart
+}

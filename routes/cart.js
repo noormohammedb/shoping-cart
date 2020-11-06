@@ -29,6 +29,15 @@ router.get('/', ToLoginIfNotVerified, (req, res) => {
       })
 });
 
+router.get('/delete-product/:id', ToLoginIfNotVerified, (req, res, next) => {
+   dbOpeUsers.deleteProductFromCart(req.params.id, req.session.userData._id)
+      .then(dbRes => res.redirect('/cart'))
+      .catch(e => {
+         console.log(e);
+         res.send('product remove error')
+      })
+
+});
 
 /* APIs for AJAX */
 
