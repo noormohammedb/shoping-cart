@@ -10,23 +10,24 @@
          <form action="/account/signup" method="POST">
             <div class="form-group">
                <label for="exampleInputEmail1">Name</label>
-               <input type="text" class="form-control" name="name">
+               <input type="text" tabindex="1" required class="form-control" name="name">
             </div>
             <div class="form-group">
                <label for="exampleInputEmail1">Email address</label>
-               <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp"
-                  name="email">
+               <input type="email" tabindex="2" required class="form-control" id="exampleInputEmail1"
+                  aria-describedby="emailHelp" name="email">
             </div>
             <div class="form-group">
                <label for="exampleInputPassword1">Password</label>
-               <input type="password" class="form-control" id="exampleInputPassword1" name="password">
+               <input type="password" tabindex="3" required class="form-control" id="exampleInputPassword1"
+                  name="password">
             </div>
             <div class="form-group">
                <div class="a">
-                  <a href="/account/login" class="p-2"> Login if you have account </a>
+                  <a href="/account/login" tabindex="5" class="p-2"> Login if you have account </a>
                </div>
                <div class="text-right mr-5">
-                  <button type="submit" class="btn btn-primary mr-2">Signup</button>
+                  <button type="submit" tabindex="4" class="btn btn-primary mr-2">Signup</button>
                </div>
             </div>
          </form>

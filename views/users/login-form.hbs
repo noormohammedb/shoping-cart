@@ -13,19 +13,20 @@
          <form action="/account/login" method="POST">
             <div class="form-group">
                <label for="exampleInputEmail1">Email address</label>
-               <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp"
-                  name="email">
+               <input type="email" tabindex="1" required class="form-control" id="exampleInputEmail1"
+                  aria-describedby="emailHelp" name="email">
             </div>
             <div class="form-group">
                <label for="exampleInputPassword1">Password</label>
-               <input type="password" class="form-control" id="exampleInputPassword1" name="password">
+               <input type="password" tabindex="2" required class="form-control" id="exampleInputPassword1"
+                  name="password">
             </div>
             <div class="form-group">
                <div class="row">
-                  <a href="/account/signup" class="p-2"> Create A Account </a>
+                  <a href="/account/signup" tabindex="4" class="p-2"> Create A Account </a>
                </div>
                <div class="text-right mr-5">
-                  <button type="submit" class="btn btn-primary mr-2">Login</button>
+                  <button type="submit" tabindex="3" class="btn btn-primary mr-2">Login</button>
                </div>
             </div>
          </form>

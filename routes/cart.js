@@ -36,7 +36,15 @@ router.get('/delete-product/:id', ToLoginIfNotVerified, (req, res, next) => {
          console.log(e);
          res.send('product remove error')
       })
+});
 
+router.get('/place-order', ToLoginIfNotVerified, (req, res) => {
+   let hbsObject = {
+      title: "Place-Order | shopping cart",
+      admin: false,
+      loggedinUser: req.session.userData
+   };
+   res.render('users/place-order', hbsObject);
 });
 
 /* APIs for AJAX */
