@@ -74,10 +74,18 @@ router.get('/add-to-cart/:id', AuthForAPI, (req, res) => {
 
 /* edit product quantity in cart */
 router.post('/edit-product-quantity', AuthForAPI, (req, res) => {
+   req.body.oper = parseInt(req.body.oper);
    dbOpeUsers.editCartProductQuantity(req.body)
       .then(dbRes => {
          let updatedQuantity =
             dbRes.value.products.find(iteration => req.body.productId == iteration.itemId)
+         if (updatedQuantity.quantity < 1) {
+            if (updatedQuantity.quantity != 0)
+               req.body.oper = 0 - updatedQuantity.quantity;
+            else
+               req.body.oper = 1
+            dbOpeUsers.editCartProductQuantity(req.body);
+         }
          res.send({
             updatedQuantity: updatedQuantity.quantity,
             success: true,
