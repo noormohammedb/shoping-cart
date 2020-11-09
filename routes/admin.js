@@ -26,7 +26,7 @@ router.get("/add-product", (req, res, next) => {
 
 router.post("/add-product", (req, res, next) => {
   console.log(req.body);
-
+  req.body.price = parseInt(req.body.price);
   if (req.files) {
     save = req.files.image;
     console.log(`file name : ${save.name} Size : ${save.size} md5 : ${save.md5}`);
@@ -45,7 +45,7 @@ router.post("/add-product", (req, res, next) => {
     console.log("no file in this request");
   }
 
-  let pushToDb = () => {
+  function pushToDb() {
     dbOperation.addProduct(req.body).then((dbRes) => {
       console.log(dbRes.ops);
     });
