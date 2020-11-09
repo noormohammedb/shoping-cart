@@ -22,10 +22,10 @@ $(document).ready(() => {
    })
 })
 
-var ele;
 
 /* change product quantity in /cart */
 function changeProduct(userId, productId, oper) {
+   let ele = $(`#${productId}`)[0].previousElementSibling;
    if (!($(`#${productId}`).val() <= 1 && oper < 0)) {
       $.ajax({
          method: 'POST',
@@ -36,9 +36,18 @@ function changeProduct(userId, productId, oper) {
             $(`#${productId}`).val(response.updatedQuantity);
          if (ele?.hasAttribute('disabled'))
             ele.removeAttribute('disabled');
+         loadTotal();
       })
    } else {
-      ele = $(`#${productId}`)[0].previousElementSibling;
       ele.setAttribute('disabled', null)
    }
+}
+
+/* get total amount from backend */
+function loadTotal() {
+   $.ajax('/cart/get-totla-price').always((res) => {
+      if (res.success) {
+         $('#total').html(res.payloadTotal);
+      }
+   })
 }
