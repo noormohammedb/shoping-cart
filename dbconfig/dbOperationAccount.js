@@ -182,6 +182,65 @@ async function deleteProductFromCart(productId, userId) {
       throw e;
    }
 }
+
+async function getTotalAmount(userId) {
+   console.log(userId);
+   try {
+      let QueryForDb = [
+         {
+            $match: {
+               userId: ObjectId(userId)
+            }
+         },
+         {
+            $unwind: '$products'
+         },
+         {
+            $project: {
+               item: '$products.itemId',
+               quantity: '$products.quantity'
+            }
+         },
+         {
+            $lookup: {
+               from: 'product',
+               localField: 'item',
+               foreignField: '_id',
+               as: 'product'
+            }
+         },
+         {
+            $project: {
+               item: 1,
+               quantity: 1,
+               product: {
+                  $arrayElemAt: ['$product', 0]
+               }
+            }
+         },
+         {
+            $group: {
+               _id: null,
+               total: {
+                  $sum: {
+                     $multiply: [{ $toInt: '$quantity' }, { $toInt: '$product.price' }]
+                  }
+               }
+            }
+         }
+      ];
+      let dbRes = await db.getDB().database.collection('cart').aggregate(QueryForDb).toArray();
+      // console.log(dbRes);
+      return dbRes[0];
+
+   }
+   catch (e) {
+      console.log(e);
+      console.log('db error, get total amount');
+      throw e;
+   }
+}
+
 module.exports = {
    signup,
    login,
@@ -189,5 +248,6 @@ module.exports = {
    getProductsFromCart,
    getCartProductsCount,
    editCartProductQuantity,
-   deleteProductFromCart
+   deleteProductFromCart,
+   getTotalAmount
 }
