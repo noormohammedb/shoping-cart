@@ -96,14 +96,14 @@ router.post('/edit-product-quantity', AuthForAPI, (req, res) => {
       .catch(e => res.status(403).send("update error"));
 });
 
-// router.get('/get-totla-price', AuthForAPI, (req, res) => {
-router.get('/get-totla-price', (req, res) => {
-   req.session.userData = {
-      "_id": "5f9e451e7bf1b71194d071ae",
-      "name": "test01",
-      "email": "01@email",
-      "password": "$2b$10$47IA1eg.LQmjHV96E5EH/eixcgUYR2ORyQJLibgdp8Bksh4gwHBxe"
-   }
+router.get('/get-totla-price', AuthForAPI, (req, res) => {
+   // router.get('/get-totla-price', (req, res) => {
+   // req.session.userData = {
+   //    "_id": "5f9e451e7bf1b71194d071ae",
+   //    "name": "test01",
+   //    "email": "01@email",
+   //    "password": "$2b$10$47IA1eg.LQmjHV96E5EH/eixcgUYR2ORyQJLibgdp8Bksh4gwHBxe"
+   // }
    dbOpeUsers.getTotalAmount(req.session.userData._id)
       .then((dbRes) => {
          let resData = {

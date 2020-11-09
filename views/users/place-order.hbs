@@ -4,7 +4,7 @@
          <form method="POST" action="/orders/checkout">
             <div class="row">
                <div class="col col-12 col-sm-10 col-md-6 grid-layout">
-                  <p class="h4 text-light text-center">Shopping Address</p>
+                  <p class="h4 text-light text-center">Shipping Address</p>
                   <hr>
                   <div class="form-group">
                      <input type="text" class="form-control" placeholder="Name" required name="name">
@@ -36,8 +36,8 @@
                         maxlength="11" name="alter_phone">
                   </div>
                </div>
-               <div class="col col-12 col-sm-6 col-md-6 border border-dark d-flex flex-column">
-                  <p class="h4 text-light text-center">Total Amout : Rs. 999 </p>
+               <div class="col col-12 col-sm-6 col-md-6 p-3 border border-dark d-flex flex-column">
+                  <p class="h4 text-light text-center">Total Amout : Rs. <span id="total">...</span> </p>
                   <hr>
                   <div class="row flex-column ml-3 text-light">
                      <p class="h5 text-left">Payment Options</p>
@@ -64,3 +64,7 @@
       </div>
    </div>
 </div>
+
+<script>
+   loadTotal();
+</script>
