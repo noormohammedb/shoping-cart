@@ -184,7 +184,6 @@ async function deleteProductFromCart(productId, userId) {
 }
 
 async function getTotalAmount(userId) {
-   console.log(userId);
    try {
       let QueryForDb = [
          {
@@ -231,7 +230,7 @@ async function getTotalAmount(userId) {
       ];
       let dbRes = await db.getDB().database.collection('cart').aggregate(QueryForDb).toArray();
       // console.log(dbRes);
-      return dbRes[0];
+      return dbRes[0].total;
 
    }
    catch (e) {

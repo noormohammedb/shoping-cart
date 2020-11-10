@@ -109,7 +109,7 @@ router.get('/get-totla-price', AuthForAPI, (req, res) => {
          let resData = {
             success: true,
             loginStatus: true,
-            payloadTotal: dbRes.total,
+            payloadTotal: dbRes,
             status: "current price"
          }
          res.json(resData);
