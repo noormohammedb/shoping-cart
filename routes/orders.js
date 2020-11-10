@@ -4,15 +4,29 @@ const dbOpeOrder = require("../dbconfig/dbOperationOrders")
 const dbOpeUsers = require("../dbconfig/dbOperationAccount")
 
 /* Orders Router */
-router.get('/', (req, res) => {
-   res.send('orders');
+router.get('/', ToLoginIfNotVerified, (req, res) => {
+   // let userId = '5f9e451e7bf1b71194d071ae';
+   let hbsObject = {
+      title: "Orders | shopping cart",
+      admin: false,
+      loggedinUser: req.session.userData
+   }
+   dbOpeOrder.getOrderProducts(req.session.userData._id).then(dbRes => {
+      hbsObject.products = dbRes;
+      dbOpeUsers.getCartProductsCount(req.session.userData._id)
+         .then((count) => {
+            hbsObject.cartTagCount = count;
+            res.render("users/orders", hbsObject);
+         })
+      // res.render('users/orders', hbsObject);
+   });
 });
 
 router.post('/checkout', AuthForAPI, async (req, res) => {
    console.log(req.body);
    console.log(req.session.userData);
 
-   /* Getting Products From Cart To Order */
+   /* Getting Products From Cart For Order */
    let userCartList = await dbOpeOrder.getCartProductsList(req.session.userData._id);
 
    console.log('user Cart List =>');
