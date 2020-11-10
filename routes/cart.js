@@ -44,7 +44,11 @@ router.get('/place-order', ToLoginIfNotVerified, (req, res) => {
       admin: false,
       loggedinUser: req.session.userData
    };
-   res.render('users/place-order', hbsObject);
+   dbOpeUsers.getCartProductsCount(req.session.userData._id)
+      .then((count) => {
+         hbsObject.cartTagCount = count;
+         res.render('users/place-order', hbsObject);
+      })
 });
 
 /* APIs for AJAX */
