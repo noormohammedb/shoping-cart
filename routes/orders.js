@@ -5,7 +5,6 @@ const dbOpeUsers = require("../dbconfig/dbOperationAccount")
 
 /* Orders Router */
 router.get('/', ToLoginIfNotVerified, (req, res) => {
-   // let userId = '5f9e451e7bf1b71194d071ae';
    let hbsObject = {
       title: "Orders | shopping cart",
       admin: false,
@@ -18,7 +17,6 @@ router.get('/', ToLoginIfNotVerified, (req, res) => {
             hbsObject.cartTagCount = count;
             res.render("users/orders", hbsObject);
          })
-      // res.render('users/orders', hbsObject);
    });
 });
 
