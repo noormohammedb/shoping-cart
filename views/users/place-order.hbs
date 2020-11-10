@@ -76,6 +76,9 @@
          data: $('#checkout-form').serialize()
       }).always(response => {
          console.log(response);
+         if (response.status) {
+            location.href = '/orders'
+         }
       })
    });
 </script>
