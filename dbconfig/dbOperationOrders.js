@@ -53,8 +53,6 @@ async function getOrders(userId) {
    try {
       console.log(userId);
       let dbRes = await db.getDB().database.collection('orders').find({ userId: ObjectId(userId) }).toArray();
-      console.log(dbRes);
-      console.log('orders db res');
       return dbRes;
    }
    catch (e) {

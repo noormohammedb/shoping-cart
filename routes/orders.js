@@ -21,7 +21,6 @@ router.get('/', ToLoginIfNotVerified, (req, res) => {
 });
 
 router.get('/view/:id', ToLoginIfNotVerified, (req, res) => {
-   console.log(req.params.id);
    let hbsObject = {
       title: "view order | shopping cart",
       admin: false,
@@ -29,6 +28,9 @@ router.get('/view/:id', ToLoginIfNotVerified, (req, res) => {
    }
    dbOpeOrder.getOrderProducts(req.params.id).then(dbRes => {
       hbsObject.products = dbRes;
+      console.log(dbRes);
+      if (!dbRes.length)
+         res.redirect('/orders/')
       dbOpeUsers.getCartProductsCount(req.session.userData._id)
          .then(count => {
             hbsObject.cartTagCount = count;
