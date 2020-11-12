@@ -16,7 +16,24 @@ router.get('/', ToLoginIfNotVerified, (req, res) => {
          .then((count) => {
             hbsObject.cartTagCount = count;
             res.render("users/orders", hbsObject);
-         })
+         });
+   });
+});
+
+router.get('/view/:id', ToLoginIfNotVerified, (req, res) => {
+   console.log(req.params.id);
+   let hbsObject = {
+      title: "view order | shopping cart",
+      admin: false,
+      loggedinUser: req.session.userData
+   }
+   dbOpeOrder.getOrderProducts(req.params.id).then(dbRes => {
+      hbsObject.products = dbRes;
+      dbOpeUsers.getCartProductsCount(req.session.userData._id)
+         .then(count => {
+            hbsObject.cartTagCount = count;
+            res.render('users/order-products', hbsObject);
+         });
    });
 });
 
