@@ -10,8 +10,8 @@ router.get('/', ToLoginIfNotVerified, (req, res) => {
       admin: false,
       loggedinUser: req.session.userData
    }
-   dbOpeOrder.getOrderProducts(req.session.userData._id).then(dbRes => {
-      hbsObject.products = dbRes;
+   dbOpeOrder.getOrders(req.session.userData._id).then(dbRes => {
+      hbsObject.orders = dbRes;
       dbOpeUsers.getCartProductsCount(req.session.userData._id)
          .then((count) => {
             hbsObject.cartTagCount = count;

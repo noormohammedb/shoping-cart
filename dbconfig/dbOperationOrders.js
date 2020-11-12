@@ -49,12 +49,27 @@ async function removeFromCart(userId) {
    }
 }
 
-async function getOrderProducts(userId) {
+async function getOrders(userId) {
+   try {
+      console.log(userId);
+      let dbRes = await db.getDB().database.collection('orders').find({ userId: ObjectId(userId) }).toArray();
+      console.log(dbRes);
+      console.log('orders db res');
+      return dbRes;
+   }
+   catch (e) {
+      console.log(e);
+      console.log('db error, get orders');
+      throw e;
+   }
+}
+
+async function getOrderProducts(orderId) {
    try {
       let QueryForDb = [
          {
             $match: {
-               userId: ObjectId(userId)
+               _id: ObjectId(orderId)
             }
          },
          {
@@ -101,5 +116,6 @@ module.exports = {
    placeOrder,
    getCartProductsList,
    removeFromCart,
+   getOrders,
    getOrderProducts
 }

@@ -1,32 +1,43 @@
+<style>
+   .w-0 {
+      width: 0 !important;
+   }
+</style>
 <section>
    <div class="container mt-3 pt-3">
       <div class="row text-center justify-content-center">
          <p class="display-4 text-info font-weight-bold">Orders</p>
       </div>
       <div class="row">
-         <table class="table table-hover table-dark table-responsive-sm">
+         <table class="table table-hover table-dark table-responsive-sm text-center">
             <thead>
                <tr>
                   <th scope="col">#</th>
-                  <th scope="col">Picture</th>
-                  <th scope="col">Product Name</th>
-                  <th scope="col">Price</th>
-                  <th scope="col">Quantity</th>
-                  <th scope="col">Description</th>
+                  <th scope="col" class="px-0 w-0">Order Id</th>
+                  <th scope="col">Order Date</th>
+                  <th scope="col">Order Price</th>
+                  <th scope="col">Payment</th>
+                  <th scope="col">Address</th>
                   <th scope="col">Status</th>
                </tr>
             </thead>
             <tbody>
-               {{#each products}}
+               {{#each orders}}
                <tr>
                   <th scope="row">{{@index}}</th>
-                  <td> <img src="/uploaded/{{this.product.image}}" alt="" style="height: 50px; width: auto;"> </td>
-                  <td> {{this.product.product_name}} </td>
-                  <td> {{this.product.price}} </td>
-                  <td> {{this.quantity}} </td>
-                  <td> {{this.product.description}} </td>
+                  <td class="px-0 w-0">
+                     <span>{{this._id}}</span>
+                  </td>
                   <td>
-                     <p>lorem</p>
+                     <span>{{this.date}}</span> || <span>{{this.time}}</span>
+                  </td>
+                  <td> {{this.totalAmount}} </td>
+                  <td> {{this.paymentMethod}} </td>
+                  <td>
+                     <span>{{this.address.address}}</span>
+                  </td>
+                  <td>
+                     <a href="/orders/{{this._id}}" class="btn btn-info">Check Products</a>
                   </td>
                </tr>
                {{/each}}
