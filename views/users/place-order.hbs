@@ -1,10 +1,11 @@
 <div class="container-md">
+   {{#if cartTagCount}}
    <div class="row mt-5">
       <div class="col p-4 mx-1 border border-secondary rounded">
-         <form method="POST" action="/orders/checkout">
+         <form method="POST" action="/orders/checkout" id="checkout-form">
             <div class="row">
                <div class="col col-12 col-sm-10 col-md-6 grid-layout">
-                  <p class="h4 text-light text-center">Shopping Address</p>
+                  <p class="h4 text-light text-center">Shipping Address</p>
                   <hr>
                   <div class="form-group">
                      <input type="text" class="form-control" placeholder="Name" required name="name">
@@ -26,18 +27,18 @@
                      <input type="text" class="form-control" placeholder="City" required name="city">
                   </div>
                   <div class="form-group">
-                     <input type="text" class="form-control" placeholder="State" required name="State">
+                     <input type="text" class="form-control" placeholder="State" required name="state">
                   </div>
                   <div class="form-group">
-                     <input type="text" class="form-control" placeholder="Landmark" required name="Landmark">
+                     <input type="text" class="form-control" placeholder="Landmark" required name="landmark">
                   </div>
                   <div class="form-group">
                      <input type="tel" class="form-control" placeholder="Alternative Phone Number" minlength="9"
                         maxlength="11" name="alter_phone">
                   </div>
                </div>
-               <div class="col col-12 col-sm-6 col-md-6 border border-dark d-flex flex-column">
-                  <p class="h4 text-light text-center">Total Amout : Rs. 999 </p>
+               <div class="col col-12 col-sm-6 col-md-6 p-3 border border-dark d-flex flex-column">
+                  <p class="h4 text-light text-center">Total Amout : Rs. <span id="total">...</span> </p>
                   <hr>
                   <div class="row flex-column ml-3 text-light">
                      <p class="h5 text-left">Payment Options</p>
@@ -56,11 +57,42 @@
                      </div>
                   </div>
                   <div class="form-group w-100 d-flex" style="justify-content: center; align-items: end; flex-grow: 1;">
-                     <button type="button" class="btn btn-success mt-5">Checkout</button>
+                     <input type="submit" class="btn btn-success mt-5" value="Checkout"
+                        onclick="return confirm('Initiate Checkout')">
                   </div>
                </div>
             </div>
          </form>
       </div>
    </div>
+   {{else}}
+   <div class="row m-5">
+      <div class="col border border-primary rounded text-danger text-center">
+         <p class="font-weight-bold">
+         <h1 class="heading-4">
+            Cart Is Empty
+         </h1>
+         <p class="text-primary">Please Add Products To Cart</p>
+         </p>
+      </div>
+   </div>
+   {{/if}}
 </div>
+
+<script>
+   loadTotal();
+   $('#checkout-form').submit(e => {
+      console.log(e)
+      e.preventDefault();
+      $.ajax({
+         url: '/orders/checkout',
+         method: 'POST',
+         data: $('#checkout-form').serialize()
+      }).always(response => {
+         console.log(response);
+         if (response.status) {
+            location.href = '/orders'
+         }
+      })
+   });
+</script>

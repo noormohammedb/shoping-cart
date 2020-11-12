@@ -4,13 +4,6 @@ var dbOpeUsers = require("../dbconfig/dbOperationAccount")
 
 /* Cart Router */
 router.get('/', ToLoginIfNotVerified, (req, res) => {
-   // router.get('/', (req, res) => {
-   // req.session.userData = {
-   //    "_id": "5f9e451e7bf1b71194d071ae",
-   //    "name": "test01",
-   //    "email": "01@email",
-   //    "password": "$2b$10$47IA1eg.LQmjHV96E5EH/eixcgUYR2ORyQJLibgdp8Bksh4gwHBxe"
-   // }
    let hbsObject = {
       title: "Cart | shopping cart",
       admin: false,
@@ -44,7 +37,11 @@ router.get('/place-order', ToLoginIfNotVerified, (req, res) => {
       admin: false,
       loggedinUser: req.session.userData
    };
-   res.render('users/place-order', hbsObject);
+   dbOpeUsers.getCartProductsCount(req.session.userData._id)
+      .then((count) => {
+         hbsObject.cartTagCount = count;
+         res.render('users/place-order', hbsObject);
+      })
 });
 
 /* APIs for AJAX */
@@ -74,10 +71,18 @@ router.get('/add-to-cart/:id', AuthForAPI, (req, res) => {
 
 /* edit product quantity in cart */
 router.post('/edit-product-quantity', AuthForAPI, (req, res) => {
+   req.body.oper = parseInt(req.body.oper);
    dbOpeUsers.editCartProductQuantity(req.body)
       .then(dbRes => {
          let updatedQuantity =
             dbRes.value.products.find(iteration => req.body.productId == iteration.itemId)
+         if (updatedQuantity.quantity < 1) {
+            if (updatedQuantity.quantity != 0)
+               req.body.oper = 0 - updatedQuantity.quantity;
+            else
+               req.body.oper = 1
+            dbOpeUsers.editCartProductQuantity(req.body);
+         }
          res.send({
             updatedQuantity: updatedQuantity.quantity,
             success: true,
@@ -86,6 +91,29 @@ router.post('/edit-product-quantity', AuthForAPI, (req, res) => {
          });
       })
       .catch(e => res.status(403).send("update error"));
+});
+
+router.get('/get-totla-price', AuthForAPI, (req, res) => {
+   dbOpeUsers.getCartProductsCount(req.session.userData._id).then(count => {
+      let resData = { loginStatus: true };
+      if (count) {
+         dbOpeUsers.getTotalAmount(req.session.userData._id)
+            .then((dbRes) => {
+               resData.payloadTotal = dbRes;
+               resData.success = true;
+               resData.status = "current price";
+               res.json(resData);
+            })
+            .catch((e) => {
+               res.send({ ...e });
+            })
+      }
+      else {
+         resData.success = false;
+         resData.status = "No Item in Cart";
+         res.json(resData);
+      }
+   })
 });
 
 

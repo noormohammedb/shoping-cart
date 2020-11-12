@@ -1,4 +1,5 @@
 <div class="container-fluid">
+   {{#if cartTagCount}}
    <div class="row mt-5">
       <div class="col"> </div>
       <div class="col col-12 col-sm-10 col-md-8">
@@ -44,14 +45,26 @@
       <div class="col"></div>
       <div class="col col-12 col-sm-10 col-md-8 text-right text-light">
          <div class="mr-5">
-            <p class="font-weight-bold" style="font-size: 2rem;">Total : Rs.</p>
+            <p class="font-weight-bold" style="font-size: 2rem;">Total : Rs. <span id="total">...</span> </p>
             <a href="/cart/place-order" class="btn btn-success">Place Order</a>
          </div>
       </div>
       <div class="col"></div>
    </div>
+   {{else}}
+   <div class="row m-5">
+      <div class="col border border-primary rounded text-danger text-center">
+         <p class="font-weight-bold">
+         <h1 class="heading-4">
+            Cart Is Empty
+         </h1>
+         <p class="text-primary">Please Add Products To Cart</p>
+         </p>
+      </div>
+   </div>
+   {{/if}}
 </div>
 
 <script>
-
+   loadTotal();
 </script>
