@@ -51,7 +51,6 @@ async function removeFromCart(userId) {
 
 async function getOrders(userId) {
    try {
-      console.log(userId);
       let dbRes = await db.getDB().database.collection('orders').find({ userId: ObjectId(userId) }).toArray();
       return dbRes;
    }

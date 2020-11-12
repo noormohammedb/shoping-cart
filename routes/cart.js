@@ -4,13 +4,6 @@ var dbOpeUsers = require("../dbconfig/dbOperationAccount")
 
 /* Cart Router */
 router.get('/', ToLoginIfNotVerified, (req, res) => {
-   // router.get('/', (req, res) => {
-   // req.session.userData = {
-   //    "_id": "5f9e451e7bf1b71194d071ae",
-   //    "name": "test01",
-   //    "email": "01@email",
-   //    "password": "$2b$10$47IA1eg.LQmjHV96E5EH/eixcgUYR2ORyQJLibgdp8Bksh4gwHBxe"
-   // }
    let hbsObject = {
       title: "Cart | shopping cart",
       admin: false,
@@ -101,26 +94,26 @@ router.post('/edit-product-quantity', AuthForAPI, (req, res) => {
 });
 
 router.get('/get-totla-price', AuthForAPI, (req, res) => {
-   // router.get('/get-totla-price', (req, res) => {
-   // req.session.userData = {
-   //    "_id": "5f9e451e7bf1b71194d071ae",
-   //    "name": "test01",
-   //    "email": "01@email",
-   //    "password": "$2b$10$47IA1eg.LQmjHV96E5EH/eixcgUYR2ORyQJLibgdp8Bksh4gwHBxe"
-   // }
-   dbOpeUsers.getTotalAmount(req.session.userData._id)
-      .then((dbRes) => {
-         let resData = {
-            success: true,
-            loginStatus: true,
-            payloadTotal: dbRes,
-            status: "current price"
-         }
+   dbOpeUsers.getCartProductsCount(req.session.userData._id).then(count => {
+      let resData = { loginStatus: true };
+      if (count) {
+         dbOpeUsers.getTotalAmount(req.session.userData._id)
+            .then((dbRes) => {
+               resData.payloadTotal = dbRes;
+               resData.success = true;
+               resData.status = "current price";
+               res.json(resData);
+            })
+            .catch((e) => {
+               res.send({ ...e });
+            })
+      }
+      else {
+         resData.success = false;
+         resData.status = "No Item in Cart";
          res.json(resData);
-      })
-      .catch((e) => {
-         res.send({ ...e });
-      })
+      }
+   })
 });
 
 

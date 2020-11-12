@@ -5,6 +5,7 @@
 </style>
 <section>
    <div class="container mt-3 pt-3">
+      {{#if showOrders}}
       <div class="row text-center justify-content-center">
          <p class="display-4 text-info font-weight-bold">Orders</p>
       </div>
@@ -44,5 +45,17 @@
             </tbody>
          </table>
       </div>
+      {{else}}
+      <div class="row">
+         <div class="col border border-primary rounded text-danger text-center">
+            <p class="font-weight-bold">
+            <h1 class="heading-4">
+               No Orders Yet
+            </h1>
+            <p class="text-primary"> Have Some Purchase Buddy </p>
+            </p>
+         </div>
+      </div>
+      {{/if}}
    </div>
 </section>

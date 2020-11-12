@@ -11,7 +11,10 @@ router.get('/', ToLoginIfNotVerified, (req, res) => {
       loggedinUser: req.session.userData
    }
    dbOpeOrder.getOrders(req.session.userData._id).then(dbRes => {
-      hbsObject.orders = dbRes;
+      if (dbRes.length) {
+         hbsObject.orders = dbRes;
+         hbsObject.showOrders = true
+      }
       dbOpeUsers.getCartProductsCount(req.session.userData._id)
          .then((count) => {
             hbsObject.cartTagCount = count;
@@ -28,7 +31,6 @@ router.get('/view/:id', ToLoginIfNotVerified, (req, res) => {
    }
    dbOpeOrder.getOrderProducts(req.params.id).then(dbRes => {
       hbsObject.products = dbRes;
-      console.log(dbRes);
       if (!dbRes.length)
          res.redirect('/orders/')
       dbOpeUsers.getCartProductsCount(req.session.userData._id)
@@ -40,20 +42,14 @@ router.get('/view/:id', ToLoginIfNotVerified, (req, res) => {
 });
 
 router.post('/checkout', AuthForAPI, async (req, res) => {
-   console.log(req.body);
-   console.log(req.session.userData);
 
    /* Getting Products From Cart For Order */
    let userCartList = await dbOpeOrder.getCartProductsList(req.session.userData._id);
 
-   console.log('user Cart List =>');
-   console.log(userCartList);
 
    /* Getting Total Amount For Checkout */
    let totalAmount = await dbOpeUsers.getTotalAmount(req.session.userData._id)
 
-   console.log('total amount =>');
-   console.log(totalAmount);
 
    let dbRes = await dbOpeOrder.placeOrder(req.body, userCartList, totalAmount, req.session.userData._id)
    if (dbRes[0]._id) {
