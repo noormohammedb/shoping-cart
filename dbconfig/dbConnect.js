@@ -1,6 +1,11 @@
 const MongoClient = require('mongodb').MongoClient;
-// require('dotenv').config({ path: `${__dirname}/../` });
-const dburl = "mongodb://127.0.0.1:27017";
+require('dotenv').config({ path: `${__dirname}/../.env` });
+
+if (process.env.NODE_ENV != 'development')
+   console.log('App Is Running As Production. Dont Forget To Set DataBase URL As Environment Variable');
+
+const dburl = process.env.DATABASE_URL || "mongodb://127.0.0.1:27017";
+/* const dburl = "mongodb://127.0.0.1:27017"; */
 const dbname = "ecom";
 
 let state = {
