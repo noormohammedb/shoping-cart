@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const dbOpeOrder = require("../dbconfig/dbOperationOrders")
 const dbOpeUsers = require("../dbconfig/dbOperationAccount")
+const { razorCreateOrder } = require('../payment');
 
 /* Orders Router */
 router.get('/', ToLoginIfNotVerified, (req, res) => {
@@ -54,13 +55,46 @@ router.post('/checkout', AuthForAPI, async (req, res) => {
    let dbRes = await dbOpeOrder.placeOrder(req.body, userCartList, totalAmount, req.session.userData._id)
    if (dbRes[0]._id) {
       dbOpeOrder.removeFromCart(req.session.userData._id)
-      res.json({
-         success: true,
-         loginStatus: true,
-         status: "order placed"
-      })
+      if (req.body.payment == 'cod') {
+         res.json({
+            success: true,
+            loginStatus: true,
+            redirect: true,
+            status: "order placed with cod"
+         });
+      } else if (req.body.payment == 'online-payment') {
+
+         console.log(dbRes[0]);
+         console.log(dbRes[0]._id);
+         console.log(typeof dbRes[0]._id);
+         console.log(dbRes[0]._id.toString());
+
+         var options = {
+            amount: parseInt(dbRes[0].totalAmount) * 100,
+            currency: "INR",
+            receipt: dbRes[0]._id.toString()
+         };
+
+         console.log('options for razor instance');
+         console.log(options);
+
+         razorCreateOrder(options).then(order => {
+
+            console.log('razorpay order object');
+            console.log(order);
+
+            res.json({
+               success: true,
+               loginStatus: true,
+               redirect: false,
+               callGateWay: true,
+               razorObj: order,
+               status: "order placed with online payment"
+            });
+         });
+      } else res.status(501).json({ status: 'Form validation error' });
    } else {
-      res.send(req.body)
+      res.status(501).json({ status: "order not created" });
    }
 });
 

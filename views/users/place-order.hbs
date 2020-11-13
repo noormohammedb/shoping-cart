@@ -78,11 +78,10 @@
    </div>
    {{/if}}
 </div>
-
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 <script>
    loadTotal();
    $('#checkout-form').submit(e => {
-      console.log(e)
       e.preventDefault();
       $.ajax({
          url: '/orders/checkout',
@@ -90,9 +89,69 @@
          data: $('#checkout-form').serialize()
       }).always(response => {
          console.log(response);
-         if (response.status) {
-            location.href = '/orders'
+         if (response.success) {
+            if (response.redirect) {
+               location.href = '/orders'
+            }
+            else if (response.callGateWay) {
+               console.log('checking and calling razorpay')
+               callRazorPay(response.razorObj)
+            }
+
          }
       })
    });
+   function callRazorPay(razorObj) {
+      console.log(razorObj);
+      var options = {
+         "key": razorObj.key_id, // Enter the Key ID generated from the Dashboard
+         "amount": razorObj.amount, // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
+         "currency": "INR",
+         "name": "Shoppign Cart",
+         "description": "Test Transaction",
+         "image": "https://example.com/your_logo",
+         "order_id": razorObj.id, //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
+         "handler": function (paymentResponse) {
+            console.log(paymentResponse.razorpay_payment_id);
+            console.log(paymentResponse.razorpay_order_id);
+            console.log(paymentResponse.razorpay_signature);
+
+            validatePayment(paymentResponse, razorObj.receipt);
+         },
+         "prefill": {
+            "name": "Gaurav Kumar",
+            "email": "gaurav.kumar@example.com",
+            "contact": "9999999999"
+         },
+         "notes": {
+            "address": "Razorpay Corporate Office"
+         },
+         "theme": {
+            "color": "#3399cc"
+         }
+      };
+
+      var rzp1 = new Razorpay(options);
+      rzp1.on('payment.failed', function (response) {
+         alert(response.error.code);
+         alert(response.error.description);
+         alert(response.error.source);
+         alert(response.error.step);
+         alert(response.error.reason);
+         alert(response.error.metadata.order_id);
+         alert(response.error.metadata.payment_id);
+      });
+
+      rzp1.open();
+   }
+
+   function validatePayment(paymentResponse, orderId) {
+      $.ajax({
+         url: '/payment',
+         method: 'POST',
+         data: { paymentResponse, orderId }
+      }).always(response => {
+         console.log(response);
+      })
+   }
 </script>

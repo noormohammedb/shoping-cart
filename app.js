@@ -13,6 +13,7 @@ var userRouter = require("./routes/users");
 var cartRouter = require("./routes/cart");
 var adminRouter = require("./routes/admin");
 var ordersRouter = require("./routes/orders");
+var paymentRouter = require("./routes/payment");
 const fileUpload = require("express-fileupload");
 
 var app = express();
@@ -46,6 +47,7 @@ app.use("/account", userRouter);
 app.use("/cart", cartRouter);
 app.use("/admin", adminRouter);
 app.use("/orders", ordersRouter);
+app.use("/payment", paymentRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
