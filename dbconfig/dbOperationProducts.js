@@ -1,7 +1,7 @@
 var db = require("./dbConnect")
 const { ObjectId } = require('mongodb')
 
-ProductCollection = 'product'
+const ProductCollection = 'product';
 
 let addProduct = (data) => {
    return new Promise(async (resolve, reject) => {
