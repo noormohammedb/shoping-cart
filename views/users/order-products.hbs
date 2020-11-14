@@ -32,7 +32,7 @@
                {{#each products}}
                <tr>
                   <th scope="row">{{@index}}</th>
-                  <td> <img src="/uploaded/{{this.product.image}}" alt="" style="height: 50px; width: auto;"> </td>
+                  <td> <img src="{{this.product.imageUrl}}" alt="" style="height: 50px; width: auto;"> </td>
                   <td> {{this.product.product_name}} </td>
                   <td> {{this.product.price}} </td>
                   <td> {{this.quantity}} </td>
