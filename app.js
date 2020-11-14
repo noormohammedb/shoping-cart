@@ -28,7 +28,7 @@ app.engine("hbs", hbs({
 })
 );
 
-app.use(fileUpload());
+app.use(fileUpload({ useTempFiles: true, tempFileDir: '/public/uploaded/' }));
 app.use(logger("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
