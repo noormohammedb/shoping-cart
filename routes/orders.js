@@ -30,15 +30,17 @@ router.get('/view/:id', ToLoginIfNotVerified, (req, res) => {
       admin: false,
       loggedinUser: req.session.userData
    }
+   if (req.params.id.length != 24) { res.redirect('/orders/'); return }
    dbOpeOrder.getOrderProducts(req.params.id).then(dbRes => {
       hbsObject.products = dbRes;
-      if (!dbRes.length)
-         res.redirect('/orders/')
-      dbOpeUsers.getCartProductsCount(req.session.userData._id)
-         .then(count => {
-            hbsObject.cartTagCount = count;
-            res.render('users/order-products', hbsObject);
-         });
+      if (!dbRes.length) { res.redirect('/orders/') }
+      else {
+         dbOpeUsers.getCartProductsCount(req.session.userData._id)
+            .then(count => {
+               hbsObject.cartTagCount = count;
+               res.render('users/order-products', hbsObject);
+            });
+      }
    });
 });
 
@@ -66,8 +68,6 @@ router.post('/checkout', AuthForAPI, async (req, res) => {
 
          console.log(dbRes[0]);
          console.log(dbRes[0]._id);
-         console.log(typeof dbRes[0]._id);
-         console.log(dbRes[0]._id.toString());
 
          var options = {
             amount: parseInt(dbRes[0].totalAmount) * 100,
@@ -82,6 +82,7 @@ router.post('/checkout', AuthForAPI, async (req, res) => {
 
             console.log('razorpay order object');
             console.log(order);
+            req.session.payOrder = order;
 
             res.json({
                success: true,
