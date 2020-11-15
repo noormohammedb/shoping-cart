@@ -109,10 +109,25 @@ async function getOrderProducts(orderId) {
    return null;
 }
 
+async function paymentUpdate(orderId) {
+   console.log(orderId);
+   try {
+      let dbRes = await db.getDB().database.collection('orders')
+         .updateOne({ _id: ObjectId(orderId) }, { $set: { paymentStatus: 'Success' } });
+      return dbRes;
+   }
+   catch (e) {
+      console.log(e);
+      console.log('db error, payment update');
+      throw e;
+   }
+}
+
 module.exports = {
    placeOrder,
    getCartProductsList,
    removeFromCart,
    getOrders,
-   getOrderProducts
+   getOrderProducts,
+   paymentUpdate
 }
