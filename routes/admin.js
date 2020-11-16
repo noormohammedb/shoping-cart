@@ -1,6 +1,7 @@
 var express = require("express");
 var router = express.Router();
 var dbOperation = require("../dbconfig/dbOperationProducts")
+const dbOpeOrder = require("../dbconfig/dbOperationOrders")
 var cloudinary = require('cloudinary').v2;
 const fs = require('fs');
 
@@ -113,6 +114,52 @@ router.get('/delete-product/:id', authAdmin, (req, res) => {
       res.redirect('/admin')
     })
     .catch(console.error)
+});
+
+router.get('/orders', authAdmin, (req, res) => {
+  hbsObject = {
+    title: "admin | Orders",
+    admin: true,
+  }
+  dbOpeOrder.getAllOrdersAdmin()
+    .then(dbRes => {
+      console.log(dbRes);
+      hbsObject.orders = dbRes;
+      res.render('admin/view-orders', hbsObject);
+    })
+});
+
+router.get('/order/:id', authAdmin, (req, res) => {
+  console.log(req.params.id);
+  hbsObject = {
+    title: "admin | Orders",
+    admin: true,
+  }
+  dbOpeOrder.getOrderDetailsAdmin(req.params.id)
+    .then(dbRes => {
+      console.log(dbRes);
+      hbsObject.orderProducts = dbRes;
+      hbsObject.orderDetails = dbRes[0];
+      res.render('admin/order-details', hbsObject);
+    })
+});
+
+/* Api routes */
+// router.post('/orders', authAdmin, (req, res) => {
+router.post('/order-status', (req, res) => {
+  dbOpeOrder.changeOrderStatusAdmin(req.body.orderId, req.body.status)
+    .then(dbRes => {
+      res.json({
+        status: true,
+        message: "updated"
+      })
+    })
+    .catch(e => {
+      res.json({
+        status: false,
+        message: 'data base updation failed'
+      })
+    })
 });
 
 /* Middlewares */
