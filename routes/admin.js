@@ -129,7 +129,7 @@ router.get('/orders', authAdmin, (req, res) => {
     })
 });
 
-router.get('/order/:id', authAdmin, (req, res) => {
+router.get('/orders/:id', authAdmin, (req, res) => {
   console.log(req.params.id);
   hbsObject = {
     title: "admin | Orders",
@@ -141,6 +141,9 @@ router.get('/order/:id', authAdmin, (req, res) => {
       hbsObject.orderProducts = dbRes;
       hbsObject.orderDetails = dbRes[0];
       res.render('admin/order-details', hbsObject);
+    })
+    .catch(e => {
+      console.log(e);
     })
 });
 
