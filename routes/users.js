@@ -24,6 +24,11 @@ router.post('/login', async (req, res) => {
         console.log('password matched');
         req.session.isLogedin = true;
         req.session.userData = dbRes[0];
+        console.log(dbRes[0]);
+        if (dbRes[0].isAdmin) {
+          req.session.isAdmin = true;
+        }
+        console.log(req.session);
         res.redirect('/');
       } else {
         console.log(compareResult);

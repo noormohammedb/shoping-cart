@@ -13,7 +13,7 @@ cloudinary.config({
 });
 
 /* GET Products . */
-router.get("/", function (req, res, next) {
+router.get("/", authAdmin, function (req, res, next) {
 
   let hbsObject = {
     title: "admin ",
@@ -25,7 +25,7 @@ router.get("/", function (req, res, next) {
   })
 });
 
-router.get("/add-product", (req, res, next) => {
+router.get("/add-product", authAdmin, (req, res, next) => {
   let hbsObject = {
     title: "admin add-porducts",
     admin: true,
@@ -33,7 +33,7 @@ router.get("/add-product", (req, res, next) => {
   res.render("admin/add-product", hbsObject);
 });
 
-router.post("/add-product", (req, res, next) => {
+router.post("/add-product", authAdmin, (req, res, next) => {
   req.body.price = parseInt(req.body.price);
   if (req.files) {
     save = req.files.image;
@@ -63,7 +63,7 @@ router.post("/add-product", (req, res, next) => {
   }
 });
 
-router.get('/edit-product/:id', (req, res) => {
+router.get('/edit-product/:id', authAdmin, (req, res) => {
   dbOperation.getProductForEdit(req.params.id)
     .then((dbRes) => {
       let hbsObject = {
@@ -80,7 +80,7 @@ router.get('/edit-product/:id', (req, res) => {
     })
 });
 
-router.post('/edit-product/:id', (req, res) => {
+router.post('/edit-product/:id', authAdmin, (req, res) => {
   console.log(req.params.id);
   console.log(req.body);
   if (req.files) {
@@ -106,7 +106,7 @@ router.post('/edit-product/:id', (req, res) => {
   }
 });
 
-router.get('/delete-product/:id', (req, res) => {
+router.get('/delete-product/:id', authAdmin, (req, res) => {
   console.log(req.params);
   dbOperation.deleteProduct(req.params.id)
     .then((data) => {
@@ -114,5 +114,15 @@ router.get('/delete-product/:id', (req, res) => {
     })
     .catch(console.error)
 });
+
+/* Middlewares */
+function authAdmin(req, res, next) {
+  if (req.session.isAdmin) {
+    next();
+  } else {
+    res.status(401).render('401', {});
+  }
+}
+
 
 module.exports = router;
