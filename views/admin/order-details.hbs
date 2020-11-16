@@ -1,0 +1,57 @@
+<section>
+   <div class="container mt-3">
+      <div class="row mb-3">
+         <div class="col border border-secondary rounded text-light p-3 ">
+            <p>Name : {{orderDetails.address.name}} </p>
+            <p>Phone Number : {{orderDetails.address.phone}} </p>
+            <div class="text-info " style=" font-size: 2rem; text-decoration: underline;">Address </div>
+            <p>address : {{orderDetails.address.address}} </p>
+            <p>pincode : {{orderDetails.address.pincode}} </p>
+            <p>city : {{orderDetails.address.city}} </p>
+            <p>locality : {{orderDetails.address.locality}} </p>
+            <p>state : {{orderDetails.address.state}} </p>
+            <p>other Phone : {{orderDetails.address.alter_phone}} </p>
+         </div>
+         <div class="col border border-secondary rounded text-light p-3 ">
+            <p>Order Id : {{orderDetails._id}} </p>
+            <p>Payment Method : {{orderDetails.paymentMethod}} </p>
+            <p>Payment Status : {{orderDetails.paymentStatus}} </p>
+            <p>Order Date and Time : {{orderDetails.Date}} | {{orderDetails.Time}} </p>
+            <p style="font-size: 2rem; color: aquamarine;">Order Amount : {{orderDetails.totalAmount}} </p>
+         </div>
+         <div class="col">
+            <a href="" class="btn btn-primary">Change Status</a>
+         </div>
+      </div>
+      <div class="row">
+         <h3 class="display-4">
+            Item Details
+         </h3>
+         <table class="table table-hover table-dark table-responsive-sm text-center">
+            <thead>
+               <tr>
+                  <th scope="col">#</th>
+                  <th scope="col" class="w-25" style="width: fit-content;">Product Id</th>
+                  <th scope="col">Product Name</th>
+                  <th scope="col">Price</th>
+                  <th scope="col">Quantity</th>
+               </tr>
+            </thead>
+            <tbody>
+               {{#each orderProducts}}
+               <tr>
+                  <th scope="row">{{@index}}</th>
+                  <td class="d-flex flex-column align-items-center">
+                     <img src="{{this.product.imageUrl}}" alt="" style="width: 100px;">
+                     <p>{{this.product._id}}</p>
+                  </td>
+                  <td> {{this.product.product_name}} </td>
+                  <td> {{this.product.price}} </td>
+                  <td> {{this.quantity}} </td>
+               </tr>
+               {{/each}}
+            </tbody>
+         </table>
+      </div>
+   </div>
+</section>

@@ -109,10 +109,86 @@ async function getOrderProducts(orderId) {
    return null;
 }
 
+async function getAllOrdersAdmin() {
+   try {
+      let dbRes = await db.getDB().database.collection('orders').find().toArray();
+      return dbRes;
+   }
+   catch (e) {
+      console.error(e);
+      console.log('db error , get order products (Aggregation)');
+      throw e
+   }
+}
+
+async function getOrderDetailsAdmin(orderId) {
+   try {
+      let QueryForDb = [
+         {
+            $match: {
+               _id: ObjectId(orderId)
+            }
+         },
+         {
+            $unwind: '$products'
+         },
+         {
+            $project: {
+               address: '$address',
+               totalAmount: '$totalAmount',
+               paymentMethod: '$paymentMethod',
+               paymentStatus: '$paymentStatus',
+               Date: '$date',
+               Time: '$time',
+               item: '$products.itemId',
+               userId: '$userId',
+               quantity: '$products.quantity'
+            }
+         },
+         {
+            $lookup: {
+               from: 'product',
+               localField: 'item',
+               foreignField: '_id',
+               as: 'product'
+            }
+         },
+         {
+            $project: {
+               item: 1,
+               quantity: 1,
+               userId: 1,
+               product: {
+                  $arrayElemAt: ['$product', 0]
+               },
+               address: 1,
+               totalAmount: 1,
+               paymentMethod: 1,
+               paymentStatus: 1,
+               Date: 1,
+               Time: 1,
+               userId: 1,
+               quantity: 1
+            }
+         }
+      ];
+      let dbRes = await db.getDB().database.collection('orders').aggregate(QueryForDb).toArray();
+      return dbRes;
+   }
+   catch (e) {
+      console.log(e);
+      console.log('db error, get orders');
+      throw e;
+   }
+}
+
+
 module.exports = {
    placeOrder,
    getCartProductsList,
    removeFromCart,
    getOrders,
-   getOrderProducts
+   getOrderProducts,
+   getAllOrdersAdmin,
+   getOrderDetailsAdmin
 }
