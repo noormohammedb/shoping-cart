@@ -13,6 +13,7 @@
                   <th scope="col">Total Price</th>
                   <th scope="col">Date and Time</th>
                   <th scope="col">payment Status</th>
+                  <th scope="col">order Status</th>
                   <th scope="col">view Order</th>
                </tr>
             </thead>
@@ -31,6 +32,7 @@
                      {{this.time}}
                   </td>
                   <td> {{this.paymentStatus}} </td>
+                  <td> {{this.orderStatus}} </td>
                   <td>
                      <a href="/admin/orders/{{this._id}}" class="btn btn-primary mr-3"> View </a>
                      {{!-- <a href="/admin/delete-product/{{this._id}}" class="btn btn-danger ml-3"

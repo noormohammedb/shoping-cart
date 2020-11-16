@@ -146,6 +146,24 @@ router.get('/orders/:id', (req, res) => {
     })
 });
 
+/* Api routes */
+// router.post('/orders', authAdmin, (req, res) => {
+router.post('/order-status', (req, res) => {
+  dbOpeOrder.changeOrderStatusAdmin(req.body.orderId, req.body.status)
+    .then(dbRes => {
+      res.json({
+        status: true,
+        message: "updated"
+      })
+    })
+    .catch(e => {
+      res.json({
+        status: false,
+        message: 'data base updation failed'
+      })
+    })
+});
+
 /* Middlewares */
 function authAdmin(req, res, next) {
   if (req.session.isAdmin) {

@@ -142,6 +142,7 @@ async function getOrderDetailsAdmin(orderId) {
                Time: '$time',
                item: '$products.itemId',
                userId: '$userId',
+               orderStatus: '$orderStatus',
                quantity: '$products.quantity'
             }
          },
@@ -168,6 +169,7 @@ async function getOrderDetailsAdmin(orderId) {
                Date: 1,
                Time: 1,
                userId: 1,
+               orderStatus: 1,
                quantity: 1
             }
          }
@@ -182,6 +184,19 @@ async function getOrderDetailsAdmin(orderId) {
    }
 }
 
+async function changeOrderStatusAdmin(orderId, status) {
+   try {
+      let dbRes = await db.getDB().database.collection('orders')
+         .update({ _id: ObjectId(orderId) }, { $set: { orderStatus: status } });
+      return dbRes;
+   }
+   catch (e) {
+      console.error(e);
+      console.log('db error , get order products (Aggregation)');
+      throw e
+   }
+}
+
 
 module.exports = {
    placeOrder,
@@ -190,5 +205,6 @@ module.exports = {
    getOrders,
    getOrderProducts,
    getAllOrdersAdmin,
-   getOrderDetailsAdmin
+   getOrderDetailsAdmin,
+   changeOrderStatusAdmin
 }
