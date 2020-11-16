@@ -116,8 +116,7 @@ router.get('/delete-product/:id', authAdmin, (req, res) => {
     .catch(console.error)
 });
 
-// router.get('/orders', authAdmin, (req, res) => {
-router.get('/orders', (req, res) => {
+router.get('/orders', authAdmin, (req, res) => {
   hbsObject = {
     title: "admin | Orders",
     admin: true,
@@ -130,8 +129,7 @@ router.get('/orders', (req, res) => {
     })
 });
 
-// router.get('/order/:id', authAdmin, (req, res) => {
-router.get('/orders/:id', (req, res) => {
+router.get('/order/:id', authAdmin, (req, res) => {
   console.log(req.params.id);
   hbsObject = {
     title: "admin | Orders",
