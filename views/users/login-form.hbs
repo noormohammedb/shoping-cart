@@ -8,9 +8,9 @@
             <h4 class="display-3 text-center">Login</h4>
          </div>
          <div class="text-center text-warning display-4">
-            <b> {{warning}} </b>
+            <b id="warning"> </b>
          </div>
-         <form action="/account/login" method="POST">
+         <form action="/account/login" method="POST" id="login-form">
             <div class="form-group">
                <label for="exampleInputEmail1">Email address</label>
                <input type="email" tabindex="1" required class="form-control" id="exampleInputEmail1"
@@ -36,3 +36,26 @@
       </div>
    </div>
 </div>
+<script>
+   $("#login-form").submit(e => {
+      e.preventDefault();
+      $("#warning").text("")
+      $.ajax({
+         url: '/account/login',
+         method: "POST",
+         data: $("#login-form").serialize()
+      }).always((response) => {
+         console.log(response);
+         if (response.status) {
+            window.location = `/`
+         } else if (response.wrongPassword) {
+            $("#warning").text("wrong Password")
+         }
+         else if (response.noUser) {
+            $("#warning").text("email not registerd")
+         } else {
+            $("#warning").text("something went wrong in server")
+         }
+      })
+   })
+</script>

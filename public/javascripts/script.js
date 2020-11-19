@@ -9,7 +9,7 @@ $(document).ready(() => {
       $.ajax(`/cart/add-to-cart/${id}`).always((a, b, resData) => {
          console.log(resData.responseJSON);
          if (!resData.responseJSON.loginStatus) {
-            window.location = `${window.location.protocol}//${window.location.host}/account/login/`;
+            window.location = `/account/login/`;
          } else if (resData.responseJSON.success) {
             if (!$("sup").html())
                $("sup").html(0)

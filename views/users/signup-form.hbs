@@ -7,10 +7,13 @@
          <div class="heading">
             <h4 class="display-3 text-center">Signup</h4>
          </div>
-         <form action="/account/signup" method="POST">
+         <form action="/account/signup" method="POST" id="signup-form">
             <div class="form-group">
                <label for="exampleInputEmail1">Name</label>
                <input type="text" tabindex="1" required class="form-control" name="name">
+            </div>
+            <div class="text-center text-warning display-4">
+               <b id="warning"> </b>
             </div>
             <div class="form-group">
                <label for="exampleInputEmail1">Email address</label>
@@ -37,3 +40,24 @@
       </div>
    </div>
 </div>
+<script>
+   $("#signup-form").submit(e => {
+      e.preventDefault();
+      $("#warning").text("")
+      $.ajax({
+         url: '/account/signup',
+         method: "POST",
+         data: $("#signup-form").serialize()
+      }).always((response) => {
+         console.log(response);
+         if (response.status) {
+            window.location = `/`
+         } else if (response.userExist) {
+            $("#warning").text("email exist")
+         }
+         else {
+            $("#warning").text("something went wrong in server")
+         }
+      })
+   })
+</script>
