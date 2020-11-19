@@ -20,6 +20,7 @@
                   <th scope="col">Payment</th>
                   <th scope="col">Address</th>
                   <th scope="col">Status</th>
+                  <th scope="col">Products</th>
                </tr>
             </thead>
             <tbody>
@@ -36,6 +37,9 @@
                   <td> {{this.paymentMethod}} </td>
                   <td>
                      <span>{{this.address.address}}</span>
+                  </td>
+                  <td>
+                     <p> {{this.orderStatus}} </p>
                   </td>
                   <td>
                      <a href="/orders/view/{{this._id}}" class="btn btn-info">Check Products</a>

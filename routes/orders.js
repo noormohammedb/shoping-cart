@@ -10,16 +10,17 @@ router.get('/', ToLoginIfNotVerified, (req, res) => {
       admin: false,
       loggedinUser: req.session.userData
    }
-   dbOpeOrder.getOrders(req.session.userData._id).then(dbRes => {
-      if (dbRes.length) {
-         hbsObject.orders = dbRes;
+   Promise.all([
+      dbOpeOrder.getOrders(req.session.userData._id),
+      dbOpeUsers.getCartProductsCount(req.session.userData._id)
+   ]).then(dbRes => {
+      if (dbRes[0].length) {
+         console.log(dbRes[0]);
+         hbsObject.orders = dbRes[0];
          hbsObject.showOrders = true
       }
-      dbOpeUsers.getCartProductsCount(req.session.userData._id)
-         .then((count) => {
-            hbsObject.cartTagCount = count;
-            res.render("users/orders", hbsObject);
-         });
+      hbsObject.cartTagCount = dbRes[1];
+      res.render("users/orders", hbsObject);
    });
 });
 

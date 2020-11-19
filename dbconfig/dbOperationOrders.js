@@ -24,6 +24,7 @@ async function placeOrder(orderdata, products, totalAmount, userId) {
          products,
          totalAmount,
          paymentStatus: status,
+         orderStatus: "Order Placed",
          date: new Date().toLocaleDateString("en-US"),
          time: new Date().toLocaleTimeString("en-US")
       }
