@@ -9,21 +9,27 @@
          </div>
          <form action="/account/signup" method="POST" id="signup-form">
             <div class="form-group">
-               <label for="exampleInputEmail1">Name</label>
-               <input type="text" tabindex="1" required class="form-control" name="name">
+               <label for="username">Name</label>
+               <input type="text" tabindex="1" required class="form-control" name="name" id="username">
             </div>
             <div class="text-center text-warning display-4">
                <b id="warning"> </b>
             </div>
             <div class="form-group">
-               <label for="exampleInputEmail1">Email address</label>
-               <input type="email" tabindex="2" required class="form-control" id="exampleInputEmail1"
-                  aria-describedby="emailHelp" name="email">
+               <label for="email">Email address</label>
+               <input type="email" tabindex="2" required class="form-control" id="email" aria-describedby="emailHelp"
+                  name="email">
             </div>
             <div class="form-group">
-               <label for="exampleInputPassword1">Password</label>
-               <input type="password" tabindex="3" required class="form-control" id="exampleInputPassword1"
-                  name="password">
+               <label for="pass1">Password</label>
+               <input type="password" tabindex="3" required class="form-control" id="pass1" name="password">
+            </div>
+            <div class="text-center text-warning" style="font-size: 2.7rem;">
+               <b id="passconf"> </b>
+            </div>
+            <div class="form-group">
+               <label for="pass2">Confirm Password</label>
+               <input type="password" tabindex="3" required class="form-control" id="pass2">
             </div>
             <div class="form-group">
                <div class="a">
@@ -43,21 +49,27 @@
 <script>
    $("#signup-form").submit(e => {
       e.preventDefault();
-      $("#warning").text("")
-      $.ajax({
-         url: '/account/signup',
-         method: "POST",
-         data: $("#signup-form").serialize()
-      }).always((response) => {
-         console.log(response);
-         if (response.status) {
-            window.location = `/`
-         } else if (response.userExist) {
-            $("#warning").text("email exist")
-         }
-         else {
-            $("#warning").text("something went wrong in server")
-         }
-      })
+      console.log()
+      if (!($("#pass1").val() == $("#pass2").val())) {
+         $("#passconf").text("Password Confirmation Did't Match")
+      } else {
+         $("#warning").text("")
+         $("#passconf").text("")
+         $.ajax({
+            url: '/account/signup',
+            method: "POST",
+            data: $("#signup-form").serialize()
+         }).always((response) => {
+            console.log(response);
+            if (response.status) {
+               window.location = `/`
+            } else if (response.userExist) {
+               $("#warning").text("email exist")
+            }
+            else {
+               $("#warning").text("something went wrong in server")
+            }
+         })
+      }
    })
 </script>
