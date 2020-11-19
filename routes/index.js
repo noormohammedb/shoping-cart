@@ -11,18 +11,24 @@ router.get("/", function (req, res, next) {
       admin: false,
       loggedinUser: req.session.userData
    };
-   dbOperation.getProduct().then((data) => {
-      // console.log(data);
-      hbsObject.products = data
-      if (req.session.isLogedin) {
-         dbOpeUsers.getCartProductsCount(req.session.userData._id)
-            .then((count) => {
-               hbsObject.cartTagCount = count;
-               res.render("index", hbsObject);
-            })
-      } else
-         res.render("index", hbsObject);
-   })
+   dbOperation.getProduct()
+      .then((data) => {
+         // console.log(data);
+         hbsObject.products = data
+         if (req.session.isLogedin) {
+            dbOpeUsers.getCartProductsCount(req.session.userData._id)
+               .then((count) => {
+                  hbsObject.cartTagCount = count;
+                  res.render("index", hbsObject);
+               })
+         } else
+            res.render("index", hbsObject);
+      })
+      .catch(e => {
+         console.log("error occurred in index getproduct");
+         console.error(e);
+         res.redirect('/');
+      })
 });
 
 module.exports = router;
