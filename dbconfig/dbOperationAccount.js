@@ -3,8 +3,11 @@ const { ObjectId } = require('mongodb');
 
 async function signup(userData) {
    try {
-      let dbRes = await db.getDB().database.collection('users').insertOne(userData);
-      return dbRes;
+      let isRegisterd = await db.getDB().database.collection('users').find({ email: userData.email }).toArray();
+      if (!isRegisterd.length) {
+         let dbRes = await db.getDB().database.collection('users').insertOne(userData);
+         return dbRes;
+      } else return "User exist";
    }
    catch (e) {
       console.error(e);

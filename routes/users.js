@@ -13,11 +13,7 @@ router.get('/login', (req, res, next) => {
   }
 })
 router.post('/login', async (req, res) => {
-  // console.log(req.body);
-  // console.log(req.body.password);
   let dbRes = await dbOpeUsers.login(req.body);
-  // console.log(dbRes);
-  // console.log(dbRes.length);
   if (dbRes.length) {
     bcrypt.compare(req.body.password, dbRes[0].password).then((compareResult) => {
       if (compareResult) {
@@ -28,17 +24,27 @@ router.post('/login', async (req, res) => {
         if (dbRes[0].isAdmin) {
           req.session.isAdmin = true;
         }
-        console.log(req.session);
-        res.redirect('/');
+        res.json({
+          status: true,
+          message: "logged in redirect to /"
+        })
       } else {
         console.log(compareResult);
         console.log('password missmatch');
-        res.render("users/login-form", { warning: 'Wrong Password' });
+        res.json({
+          status: false,
+          wrongPassword: true,
+          message: "Password MissMatch"
+        })
       }
     })
   } else {
     console.log('no user found');
-    res.render("users/login-form", { warning: 'No User Found' });
+    res.json({
+      status: false,
+      noUser: true,
+      message: "User Not Registerd"
+    })
   }
 })
 
@@ -52,12 +58,24 @@ router.get('/signup', (req, res) => {
 })
 
 router.post('/signup', async (req, res) => {
-  // console.log(req.body);
+  console.log(req.body);
   req.body.password = await bcrypt.hash(req.body.password, 10)
   dbOpeUsers.signup(req.body).then((dbRes) => {
-    req.session.isLogedin = true;
-    req.session.userData = JSON.parse(JSON.stringify(dbRes.ops[0]));
-    res.redirect('/account/login')
+    if (dbRes.ops) {
+      console.log("array");
+      req.session.isLogedin = true;
+      req.session.userData = JSON.parse(JSON.stringify(dbRes.ops[0]));
+      res.json({
+        status: true,
+        message: "User signedup"
+      })
+    } else {
+      res.json({
+        status: false,
+        userExist: true,
+        message: "User Exist"
+      })
+    }
   })
 })
 
