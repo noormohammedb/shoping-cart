@@ -38,6 +38,7 @@ router.post("/add-product", authAdmin, (req, res, next) => {
   req.body.price = parseInt(req.body.price);
   if (req.files) {
     save = req.files.image;
+    console.log(save);
     cloudinary.uploader.upload(save.tempFilePath)
       .then(result => {
         req.body.imageUrl = result.url;
