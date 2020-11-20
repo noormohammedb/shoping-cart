@@ -97,6 +97,18 @@ router.get('/profile', ToLoginIfNotVerified, (req, res) => {
   res.render("users/profile", hbsObject)
 });
 
+router.get('/change-password', (req, res) => {
+  // router.get('/change-password', ToLoginIfNotVerified, (req, res) => {
+  hbsObject = {
+    title: "Shopping Cart | Profile",
+    admin: false,
+    // loggedinUser: req.session.userData,
+    // name: req.session.userData.name,
+    // email: req.session.userData.email
+  }
+  res.render("users/change-passwd", hbsObject)
+})
+
 /* API routes */
 
 router.post('/profile-update', AuthForAPI, (req, res) => {

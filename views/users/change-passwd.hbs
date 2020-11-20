@@ -1,0 +1,72 @@
+<div class="container">
+   <div class="row">
+      <div class="col"></div>
+      <div class="col-12 col-sm-10 col-md-8 mt-5 p-2">
+         <div class="jumbotron bg-dark pt-1">
+            <h3 class="text-center text-info display-4">Change Password</h3>
+            <hr>
+            <div class="round-pic d-flex justify-content-center">
+               <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-person-circle" fill="currentColor"
+                  xmlns="http://www.w3.org/2000/svg" style="width: 12rem;height: 12rem">
+                  <path
+                     d="M13.468 12.37C12.758 11.226 11.195 10 8 10s-4.757 1.225-5.468 2.37A6.987 6.987 0 0 0 8 15a6.987 6.987 0 0 0 5.468-2.63z" />
+                  <path fill-rule="evenodd" d="M8 9a3 3 0 1 0 0-6 3 3 0 0 0 0 6z" />
+                  <path fill-rule="evenodd" d="M8 1a7 7 0 1 0 0 14A7 7 0 0 0 8 1zM0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8z" />
+               </svg>
+            </div>
+            <hr>
+            <div class="profile">
+               <div class="mx-5 text-warning font-weight-bold" style="font-size: 2rem;">
+                  <p id="warning"> </p>
+               </div>
+               <form class="px-3 m-2" id="profile-form">
+                  <div class="form-group mb-5">
+                     <input type="password" class="form-control" id="old-pass" name="old-pass"
+                        placeholder="Old Password">
+                  </div>
+                  <div class="form-group d-flex">
+                     <input type="password" class="form-control" id="passwd1" name="password"
+                        placeholder="New Password">
+                  </div>
+                  <div class="form-group d-flex">
+                     <input type="password" class="form-control" id="passwd2" placeholder="Confirm Password">
+                     <label for="passwd2" id="toggle-pass">
+                        <div class="btn btn-outline-primary mx-1 p-1">
+                           <svg width="1.5em" height="1.7em" viewBox="0 0 16 16" class="bi bi-eye" fill="currentColor"
+                              xmlns="http://www.w3.org/2000/svg">
+                              <path fill-rule="evenodd"
+                                 d="M16 8s-3-5.5-8-5.5S0 8 0 8s3 5.5 8 5.5S16 8 16 8zM1.173 8a13.134 13.134 0 0 0 1.66 2.043C4.12 11.332 5.88 12.5 8 12.5c2.12 0 3.879-1.168 5.168-2.457A13.134 13.134 0 0 0 14.828 8a13.133 13.133 0 0 0-1.66-2.043C11.879 4.668 10.119 3.5 8 3.5c-2.12 0-3.879 1.168-5.168 2.457A13.133 13.133 0 0 0 1.172 8z" />
+                              <path fill-rule="evenodd"
+                                 d="M8 5.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5zM4.5 8a3.5 3.5 0 1 1 7 0 3.5 3.5 0 0 1-7 0z" />
+                              <path fill-rule="evenodd" d="M13.646 14.354l-12-12 .708-.708 12 12-.708.708z" id="cross"
+                                 style="display: none;" />
+                           </svg>
+                        </div>
+                     </label>
+                  </div>
+               </form>
+               <div class="mt-4 text-center">
+                  <input type="submit" class="btn btn-primary w-50" id="save-change" form="profile-form"
+                     value="Change Password">
+               </div>
+            </div>
+         </div>
+      </div>
+      <div class="col"></div>
+   </div>
+</div>
+<a href="/account/change-password" class="btn btn-primary"></a>
+<script>
+   $("#toggle-pass").click(e => {
+      console.log("")
+      var type = $("#passwd2").attr("type");
+      if (type == "text") {
+         $("#passwd2").attr("type", "password");
+         $("#cross").hide()
+      }
+      else {
+         $("#passwd2").attr("type", "text");
+         $("#cross").show()
+      }
+   })
+</script>
