@@ -28,6 +28,27 @@ async function login(userData) {
    }
 }
 
+async function profileUpdate(userId, userData) {
+   console.log(userId);
+   console.log(userData);
+   try {
+      let dbRes = await db.getDB().database.collection('users').updateOne(
+         {
+            _id: ObjectId(userId)
+         },
+         {
+            $set: { ...userData }
+         }
+      )
+      return dbRes;
+   }
+   catch (e) {
+      console.error(e);
+      console.log('db error , profile update error');
+      throw e
+   }
+}
+
 async function addToCart(dataObj) {
    let productObject = {
       itemId: ObjectId(dataObj.productId),
@@ -251,5 +272,6 @@ module.exports = {
    getCartProductsCount,
    editCartProductQuantity,
    deleteProductFromCart,
+   profileUpdate,
    getTotalAmount
 }

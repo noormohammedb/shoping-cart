@@ -86,19 +86,66 @@ router.get('/logout', (req, res) => {
 
 })
 
-router.get('/profile', (req, res) => {
+router.get('/profile', ToLoginIfNotVerified, (req, res) => {
   hbsObject = {
     title: "Shopping Cart | Profile",
-    name: "test name",
-    email: "test@email.com"
+    admin: false,
+    loggedinUser: req.session.userData,
+    name: req.session.userData.name,
+    email: req.session.userData.email
   }
   res.render("users/profile", hbsObject)
 });
 
-router.post('/profile-update', (req, res) => {
+/* API routes */
+
+router.post('/profile-update', AuthForAPI, (req, res) => {
   console.log(req.body);
-  res.json({ message: "success", ...req.body });
+  resObj = {
+    loginStatus: true,
+    message: "success",
+    ...req.body
+  }
+  dbOpeUsers.profileUpdate(req.session.userData._id, req.body)
+    .then(dbRes => {
+      req.session.userData = { ...req.session.userData, ...req.body };
+      res.json({
+        ...resObj,
+        status: true,
+        message: "Updated Successfully"
+      });
+
+    })
+    .catch(e => {
+      res.json({
+        ...resObj,
+        status: false,
+        message: "server error"
+      })
+    })
 
 });
+
+/* MiddleWare for login verification */
+function ToLoginIfNotVerified(req, res, next) {
+  if (req.session.isLogedin) {
+    next()
+  } else {
+    console.log("Redirected to login");
+    res.redirect('/account/login')
+  }
+}
+
+/* MiddleWare for API to login verification */
+function AuthForAPI(req, res, next) {
+  if (!req.session.isLogedin) {
+    res.send({
+      success: false,
+      loginStatus: false,
+      status: "User Not LoggedIn"
+    });
+  } else
+    next();
+}
 
 module.exports = router;
