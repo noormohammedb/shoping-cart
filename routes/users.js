@@ -97,26 +97,23 @@ router.get('/profile', ToLoginIfNotVerified, (req, res) => {
   res.render("users/profile", hbsObject)
 });
 
-router.get('/change-password', (req, res) => {
-  // router.get('/change-password', ToLoginIfNotVerified, (req, res) => {
+router.get('/change-password', ToLoginIfNotVerified, (req, res) => {
   hbsObject = {
     title: "Shopping Cart | Profile",
     admin: false,
-    // loggedinUser: req.session.userData,
-    // name: req.session.userData.name,
-    // email: req.session.userData.email
+    loggedinUser: req.session.userData,
   }
   res.render("users/change-passwd", hbsObject)
 })
 
 /* API routes */
 
+/* Update Profile Details */
 router.post('/profile-update', AuthForAPI, (req, res) => {
   console.log(req.body);
   resObj = {
     loginStatus: true,
     message: "success",
-    ...req.body
   }
   dbOpeUsers.profileUpdate(req.session.userData._id, req.body)
     .then(dbRes => {
@@ -135,7 +132,36 @@ router.post('/profile-update', AuthForAPI, (req, res) => {
         message: "server error"
       })
     })
+});
 
+/* change password */
+router.post('/change-password', AuthForAPI, async (req, res) => {
+  let dbRes = await dbOpeUsers.login(req.session.userData);
+  if (dbRes.length) {
+    bcrypt.compare(req.body.oldPass, dbRes[0].password)
+      .then(async (compareResult) => {
+        if (compareResult) {
+          console.log('password matched');
+          let hPasswd = await bcrypt.hash(req.body.newPassword, 10)
+          dbOpeUsers.changePassword(req.session.userData._id, hPasswd)
+            .then(dbRes => {
+              res.json({
+                status: true,
+                loginStatus: true,
+                message: "Password Changed Successfully"
+              })
+            })
+        } else {
+          console.log('password missmatch');
+          res.json({
+            status: false,
+            loginStatus: true,
+            wrongPassword: true,
+            message: "Password MissMatch"
+          })
+        }
+      })
+  }
 });
 
 /* MiddleWare for login verification */

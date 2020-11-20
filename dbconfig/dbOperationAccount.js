@@ -49,6 +49,26 @@ async function profileUpdate(userId, userData) {
    }
 }
 
+
+async function changePassword(userId, hPasswd) {
+   try {
+      dbRes = await db.getDB().database.collection('users').updateOne(
+         {
+            _id: ObjectId(userId)
+         },
+         {
+            $set: { password: hPasswd }
+         }
+      )
+      return dbRes;
+   }
+   catch (e) {
+      console.error(e);
+      console.log('db error , change password error');
+      throw e
+   }
+}
+
 async function addToCart(dataObj) {
    let productObject = {
       itemId: ObjectId(dataObj.productId),
@@ -273,5 +293,6 @@ module.exports = {
    editCartProductQuantity,
    deleteProductFromCart,
    profileUpdate,
+   changePassword,
    getTotalAmount
 }

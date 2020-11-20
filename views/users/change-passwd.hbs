@@ -19,17 +19,20 @@
                <div class="mx-5 text-warning font-weight-bold" style="font-size: 2rem;">
                   <p id="warning"> </p>
                </div>
-               <form class="px-3 m-2" id="profile-form">
+               <form class="px-3 m-2" id="change-password-form">
                   <div class="form-group mb-5">
-                     <input type="password" class="form-control" id="old-pass" name="old-pass"
-                        placeholder="Old Password">
+                     <input type="password" class="form-control" id="old-pass" name="oldPass" placeholder="Old Password"
+                        required>
+                     <div class="confirm-warning ml-5 warning-font">
+                        <p id="wrong-warning"> </p>
+                     </div>
+                  </div>
+                  <div class="form-group">
+                     <input type="password" class="form-control" id="passwd1" name="newPassword"
+                        placeholder="New Password" required>
                   </div>
                   <div class="form-group d-flex">
-                     <input type="password" class="form-control" id="passwd1" name="password"
-                        placeholder="New Password">
-                  </div>
-                  <div class="form-group d-flex">
-                     <input type="password" class="form-control" id="passwd2" placeholder="Confirm Password">
+                     <input type="password" class="form-control" id="passwd2" placeholder="Confirm Password" required>
                      <label for="passwd2" id="toggle-pass">
                         <div class="btn btn-outline-primary mx-1 p-1">
                            <svg width="1.5em" height="1.7em" viewBox="0 0 16 16" class="bi bi-eye" fill="currentColor"
@@ -44,9 +47,12 @@
                         </div>
                      </label>
                   </div>
+                  <div class="confirm-warning ml-5 warning-font">
+                     <p id="confirm-warning"> </p>
+                  </div>
                </form>
                <div class="mt-4 text-center">
-                  <input type="submit" class="btn btn-primary w-50" id="save-change" form="profile-form"
+                  <input type="submit" class="btn btn-primary w-50" id="save-change" form="change-password-form"
                      value="Change Password">
                </div>
             </div>
@@ -57,6 +63,35 @@
 </div>
 <a href="/account/change-password" class="btn btn-primary"></a>
 <script>
+   $("#change-password-form").submit(e => {
+      e.preventDefault();
+      console.log(e)
+      console.log($("#change-password-form").serialize())
+      if (!($("#passwd1").val() == $("#passwd2").val())) {
+         $("#confirm-warning").text("Password Confirmation Did't Match")
+         removeWarning("#confirm-warning");
+      } else {
+         $.ajax({
+            url: "change-password",
+            method: "POST",
+            data: $("#change-password-form").serialize()
+         }).always(response => {
+            console.log(response)
+            if (response.status) {
+               $("#warning").text(response.message);
+               removeWarning("warning")
+               $("#change-password-form")[0].reset();
+            }
+            else if (response.wrongPassword) {
+               $("#wrong-warning").text(response.message);
+               removeWarning("wrong-warning")
+               $("#old-pass").focus();
+            }
+
+         });
+      }
+   })
+   
    $("#toggle-pass").click(e => {
       console.log("")
       var type = $("#passwd2").attr("type");
@@ -69,4 +104,10 @@
          $("#cross").show()
       }
    })
+
+   function removeWarning(tagId) {
+      setTimeout(() => {
+         $(`#${tagId}`).text("")
+      }, 4000)
+   }
 </script>

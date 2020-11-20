@@ -21,6 +21,11 @@ body {
   grid-template-columns: auto auto;
   grid-gap: 1.5rem;
 }
+.warning-font{
+  font-size: 1.75rem;
+  color: #ffc107;
+  transition-duration: 2000ms;
+}
 
 @media (max-width: 768px){
   .respo{
