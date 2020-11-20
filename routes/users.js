@@ -9,7 +9,7 @@ router.get('/login', (req, res, next) => {
     console.log('login redirect to home');
     res.redirect('/')
   } else {
-    res.render("users/login-form", {});
+    res.render("users/login-form", { title: "shopping cart" });
   }
 })
 router.post('/login', async (req, res) => {
@@ -53,7 +53,7 @@ router.get('/signup', (req, res) => {
     console.log('signup redirect to home');
     res.redirect('/')
   } else {
-    res.render("users/signup-form", {})
+    res.render("users/signup-form", { title: "shopping cart" })
   }
 })
 
@@ -85,4 +85,9 @@ router.get('/logout', (req, res) => {
   res.redirect('/')
 
 })
+
+router.get('/profile', (req, res) => {
+  res.render("users/profile", { title: "Shopping Cart | Profile" })
+})
+
 module.exports = router;
