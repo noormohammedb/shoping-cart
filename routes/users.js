@@ -9,7 +9,7 @@ router.get('/login', (req, res, next) => {
     console.log('login redirect to home');
     res.redirect('/')
   } else {
-    res.render("users/login-form", {});
+    res.render("users/login-form", { title: "shopping cart" });
   }
 })
 router.post('/login', async (req, res) => {
@@ -53,7 +53,7 @@ router.get('/signup', (req, res) => {
     console.log('signup redirect to home');
     res.redirect('/')
   } else {
-    res.render("users/signup-form", {})
+    res.render("users/signup-form", { title: "shopping cart" })
   }
 })
 
@@ -85,4 +85,105 @@ router.get('/logout', (req, res) => {
   res.redirect('/')
 
 })
+
+router.get('/profile', ToLoginIfNotVerified, (req, res) => {
+  hbsObject = {
+    title: "Shopping Cart | Profile",
+    admin: false,
+    loggedinUser: req.session.userData,
+    name: req.session.userData.name,
+    email: req.session.userData.email
+  }
+  res.render("users/profile", hbsObject)
+});
+
+router.get('/change-password', ToLoginIfNotVerified, (req, res) => {
+  hbsObject = {
+    title: "Shopping Cart | Profile",
+    admin: false,
+    loggedinUser: req.session.userData,
+  }
+  res.render("users/change-passwd", hbsObject)
+})
+
+/* API routes */
+
+/* Update Profile Details */
+router.post('/profile-update', AuthForAPI, (req, res) => {
+  console.log(req.body);
+  resObj = {
+    loginStatus: true,
+    message: "success",
+  }
+  dbOpeUsers.profileUpdate(req.session.userData._id, req.body)
+    .then(dbRes => {
+      req.session.userData = { ...req.session.userData, ...req.body };
+      res.json({
+        ...resObj,
+        status: true,
+        message: "Updated Successfully"
+      });
+
+    })
+    .catch(e => {
+      res.json({
+        ...resObj,
+        status: false,
+        message: "server error"
+      })
+    })
+});
+
+/* change password */
+router.post('/change-password', AuthForAPI, async (req, res) => {
+  let dbRes = await dbOpeUsers.login(req.session.userData);
+  if (dbRes.length) {
+    bcrypt.compare(req.body.oldPass, dbRes[0].password)
+      .then(async (compareResult) => {
+        if (compareResult) {
+          console.log('password matched');
+          let hPasswd = await bcrypt.hash(req.body.newPassword, 10)
+          dbOpeUsers.changePassword(req.session.userData._id, hPasswd)
+            .then(dbRes => {
+              res.json({
+                status: true,
+                loginStatus: true,
+                message: "Password Changed Successfully"
+              })
+            })
+        } else {
+          console.log('password missmatch');
+          res.json({
+            status: false,
+            loginStatus: true,
+            wrongPassword: true,
+            message: "Password MissMatch"
+          })
+        }
+      })
+  }
+});
+
+/* MiddleWare for login verification */
+function ToLoginIfNotVerified(req, res, next) {
+  if (req.session.isLogedin) {
+    next()
+  } else {
+    console.log("Redirected to login");
+    res.redirect('/account/login')
+  }
+}
+
+/* MiddleWare for API to login verification */
+function AuthForAPI(req, res, next) {
+  if (!req.session.isLogedin) {
+    res.send({
+      success: false,
+      loginStatus: false,
+      status: "User Not LoggedIn"
+    });
+  } else
+    next();
+}
+
 module.exports = router;
