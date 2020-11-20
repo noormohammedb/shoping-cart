@@ -64,11 +64,13 @@
    $("#edit-name").click(e => {
       console.log("name edit clicked")
       $("#name").removeAttr("disabled")
+      $("#name").attr("required", "")
       $("#save-change").removeAttr("disabled")
    })
    $("#edit-email").click(e => {
       console.log("name email clicked")
       $("#email").removeAttr("disabled")
+      $("#email").attr("required", "")
       $("#save-change").removeAttr("disabled")
    })
    $("#profile-form").submit(e => {
