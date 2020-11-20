@@ -87,7 +87,18 @@ router.get('/logout', (req, res) => {
 })
 
 router.get('/profile', (req, res) => {
-  res.render("users/profile", { title: "Shopping Cart | Profile" })
-})
+  hbsObject = {
+    title: "Shopping Cart | Profile",
+    name: "test name",
+    email: "test@email.com"
+  }
+  res.render("users/profile", hbsObject)
+});
+
+router.post('/profile-update', (req, res) => {
+  console.log(req.body);
+  res.json({ message: "success", ...req.body });
+
+});
 
 module.exports = router;

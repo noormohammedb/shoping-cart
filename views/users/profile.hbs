@@ -1,7 +1,7 @@
 <div class="container">
    <div class="row">
       <div class="col"></div>
-      <div class="col-12 col-sm-10 col-md-8 mt-5 p-2 border border-primary">
+      <div class="col-12 col-sm-10 col-md-8 mt-5 p-2">
          <div class="jumbotron bg-dark">
             <div class="round-pic d-flex justify-content-center">
                <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-person-circle" fill="currentColor"
@@ -14,10 +14,14 @@
             </div>
             <hr>
             <div class="profile">
+               <div class="mx-5 text-warning font-weight-bold" style="font-size: 2rem;">
+                  <p id="warning"> </p>
+               </div>
                <form class="px-3 m-2" id="profile-form">
                   <div class="form-group d-flex">
-                     <input type="text" class="form-control" id="name" name="name" value="" placeholder="Name" disabled>
-                     <label for="name" id="edit-email">
+                     <input type="text" class="form-control" id="name" name="name" value="{{name}}" placeholder="Name"
+                        disabled>
+                     <label for="name" id="edit-name">
                         <div class="btn btn-outline-primary mx-1">
                            <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-pencil" fill="currentColor"
                               xmlns="http://www.w3.org/2000/svg">
@@ -29,8 +33,8 @@
                      </label>
                   </div>
                   <div class="form-group d-flex">
-                     <input type="email" class="form-control" id="email" name="email" value="" placeholder="E-mail"
-                        disabled>
+                     <input type="email" class="form-control" id="email" name="email" value="{{email}}"
+                        placeholder="E-mail" disabled>
                      <label for="email" id="edit-email">
                         <div class="btn btn-outline-primary mx-1">
                            <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-pencil" fill="currentColor"
@@ -45,7 +49,8 @@
                </form>
                <div class="custom-grid mt-4">
                   <a href="/account/profile" class="btn btn-primary">Change Password</a>
-                  <button type="submit" class="btn btn-primary disabled" id="save-change">Save Changes</button>
+                  <input type="submit" class="btn btn-primary" id="save-change" form="profile-form" disabled
+                     value="Save Changes">
                </div>
             </div>
          </div>
@@ -53,3 +58,28 @@
       <div class="col"></div>
    </div>
 </div>
+<script>
+   $("#edit-name").click(e => {
+      console.log("name edit clicked")
+      $("#name").removeAttr("disabled")
+      $("#save-change").removeAttr("disabled")
+   })
+   $("#edit-email").click(e => {
+      console.log("name email clicked")
+      $("#email").removeAttr("disabled")
+      $("#save-change").removeAttr("disabled")
+   })
+   $("#profile-form").submit(e => {
+      e.preventDefault()
+      console.log("submit button clicked")
+      $.ajax({
+         url: "profile-update",
+         method: "POST",
+         data: $("#profile-form").serialize()
+      }).always((response) => {
+         console.log(response);
+         $("#warning").text(response.message)
+         setTimeout(() => { $("#warning").text("") }, 2500)
+      })
+   })
+</script>
