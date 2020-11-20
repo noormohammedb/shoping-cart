@@ -27,7 +27,7 @@ router.get("/", function (req, res, next) {
       .catch(e => {
          console.log("error occurred in index getproduct");
          console.error(e);
-         res.redirect('/');
+         setTimeout(() => res.redirect("/"), 1500);
       })
 });
 
